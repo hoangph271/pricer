@@ -39,7 +39,8 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
 
 export default Home
 
-const API_ROOT = 'http://0.0.0.0:3000/api'
+const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
+
 export async function getServerSideProps () {
   const res = await fetch(`${API_ROOT}/coins/`)
 
