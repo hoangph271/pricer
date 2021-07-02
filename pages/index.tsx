@@ -2,7 +2,7 @@ import { FC } from 'react'
 import type { CoinStats } from './api/coins'
 
 const formatVnd = (amount: number ) => {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 }
 const sheetsDayToDate = (days: number) => {
   const dayZero = new Date('1899-12-31T16:53:20.000Z')
