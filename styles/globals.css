@@ -1,9 +1,10 @@
+@import 'https://fonts.googleapis.com/css?family=Press+Start+2P';
+@import 'https://unpkg.com/nes.css@2.3.0/css/nes.min.css';
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
