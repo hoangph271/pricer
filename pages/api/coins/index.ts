@@ -41,7 +41,7 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     getValues('D3'),
     getValues('E3'),
     getValues('C4'),
-    getValues('C8'),
+    getValues('C7'),
     getValues('A3:B10000')
   ])
 
