@@ -49,6 +49,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
           </li>
         ))}
       </ul>
+      <MoneyBadge usdAmount={totalFils * filPrice} usdPrice={usdPrice} />
     </div>
   )
 }
