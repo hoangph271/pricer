@@ -5,8 +5,8 @@ const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2
+    maximumFractionDigits: 4,
+    minimumFractionDigits: 4
   }).format(amount)
 }
 const sheetsDayToDate = (days: number) => {
