@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import type { CoinStats } from './api/coins'
 
 const formatUsd = (amount: number) => {
@@ -9,6 +9,9 @@ const formatUsd = (amount: number) => {
     minimumFractionDigits: 4
   }).format(amount)
 }
+const formatVnd = (amount: number) => {
+  return `${Math.floor(amount).toLocaleString()} VND`
+}
 const sheetsDayToDate = (days: number) => {
   const dayZero = new Date('1899-12-31T16:53:20.000Z')
   dayZero.setDate(dayZero.getDate() + days)
@@ -16,16 +19,24 @@ const sheetsDayToDate = (days: number) => {
   return dayZero
 }
 
+const MoneyBadge: FC<{ usdAmount: number, usdPrice: number }> = (props) => {
+  const { usdAmount, usdPrice } = props
+  const [showInUsd, setShowInUsd] = useState(true)
+
+  return (
+    <div className="nes-badge" onClick={() => setShowInUsd(!showInUsd)} style={{ width: '13rem' }}>
+      <span className={`is-${usdAmount > 0 ? 'success' : 'error'}`}>
+        <span>{showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)}</span>
+      </span>
+    </div>
+  )
+}
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const { balanceChanges, totalFils, filPrice, paidEntries } = props.coinStats
+  const { balanceChanges, totalFils, filPrice, paidEntries, usdPrice } = props.coinStats
 
   return (
     <div>
-      <div className="nes-badge">
-        <span className={`is-${balanceChanges > 0 ? 'success' : 'error'}`}>
-          {formatUsd(balanceChanges)}
-        </span>
-      </div>
+      <MoneyBadge usdAmount={balanceChanges} usdPrice={usdPrice} />
       <h3 style={{ color: balanceChanges > 0 ? '#78b861' : '#d82525', fontWeight: 'bold' }}>
       </h3>
       <p>{`${totalFils} FIL at ${formatUsd(filPrice)}`}</p>
