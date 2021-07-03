@@ -1,8 +1,13 @@
 import { FC } from 'react'
 import type { CoinStats } from './api/coins'
 
-const formatVnd = (amount: number) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+const formatUsd = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2
+  }).format(amount)
 }
 const sheetsDayToDate = (days: number) => {
   const dayZero = new Date('1899-12-31T16:53:20.000Z')
@@ -18,18 +23,18 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
     <div>
       <div className="nes-badge">
         <span className={`is-${balanceChanges > 0 ? 'success' : 'error'}`}>
-          {formatVnd(balanceChanges)}
+          {formatUsd(balanceChanges)}
         </span>
       </div>
       <h3 style={{ color: balanceChanges > 0 ? '#78b861' : '#d82525', fontWeight: 'bold' }}>
       </h3>
-      <p>{`${totalFils} FIL at $${filPrice}`}</p>
+      <p>{`${totalFils} FIL at ${formatUsd(filPrice)}`}</p>
       <ul>
         {paidEntries.map(([time, amount], i) => (
           <li key={i}>
             <span>{sheetsDayToDate(time).toLocaleDateString()}</span>
             <span>{' - '}</span>
-            <span>{formatVnd(amount)}</span>
+            <span>{formatUsd(amount)}</span>
           </li>
         ))}
       </ul>
