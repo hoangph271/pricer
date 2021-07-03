@@ -44,18 +44,19 @@ export default async function handler (_: NextApiRequest, res: NextApiResponse) 
   const sheets = google.sheets({ version: 'v4', auth })
 
   const [
+    [[totalSpent]],
     [[totalFils]],
-    [[balanceChanges]],
     [[usdPrice]],
     paidEntries
   ] = await Promise.all([
+    getValues('A1'),
     getValues('D3'),
-    getValues('C4'),
     getValues('C7'),
     getValues('A3:B10000')
   ])
 
   const filPrice = await getFilPrice()
+  const balanceChanges = filPrice * totalFils - totalSpent
 
   const resBody: CoinStats = {
     totalFils,
