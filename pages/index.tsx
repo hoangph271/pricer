@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { FC } from '../next-env'
 import type { CoinStats } from './api/coins'
 
 const formatMoney = (amount: number) => {
@@ -20,12 +19,6 @@ const formatUsd = (amount: number) => {
 const formatVnd = (amount: number) => {
   return `${Math.floor(amount).toLocaleString()} VND`
 }
-// const sheetsDayToDate = (days: number) => {
-//   const dayZero = new Date('1899-12-31T16:53:20.000Z')
-//   dayZero.setDate(dayZero.getDate() + days)
-
-//   return dayZero
-// }
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number }> = (props) => {
   const { usdAmount, usdPrice } = props
