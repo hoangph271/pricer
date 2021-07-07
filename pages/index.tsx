@@ -1,6 +1,14 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
+import styled from 'styled-components'
+import { FC } from '../next-env'
 import type { CoinStats } from './api/coins'
 
+const formatMoney = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 4,
+    minimumFractionDigits: 4
+  }).format(amount)
+}
 const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -12,12 +20,12 @@ const formatUsd = (amount: number) => {
 const formatVnd = (amount: number) => {
   return `${Math.floor(amount).toLocaleString()} VND`
 }
-const sheetsDayToDate = (days: number) => {
-  const dayZero = new Date('1899-12-31T16:53:20.000Z')
-  dayZero.setDate(dayZero.getDate() + days)
+// const sheetsDayToDate = (days: number) => {
+//   const dayZero = new Date('1899-12-31T16:53:20.000Z')
+//   dayZero.setDate(dayZero.getDate() + days)
 
-  return dayZero
-}
+//   return dayZero
+// }
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number }> = (props) => {
   const { usdAmount, usdPrice } = props
@@ -32,29 +40,45 @@ const MoneyBadge: FC<{ usdAmount: number, usdPrice: number }> = (props) => {
   )
 }
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
+  const { className } = props
   const { balanceChanges, totalFils, filPrice, paidEntries, usdPrice } = props.coinStats
 
   return (
-    <div>
-      <MoneyBadge usdAmount={balanceChanges} usdPrice={usdPrice} />
-      <h3 style={{ color: balanceChanges > 0 ? '#78b861' : '#d82525', fontWeight: 'bold' }}>
-      </h3>
-      <p>{`${totalFils} FIL at ${formatUsd(filPrice)}`}</p>
+    <div className={className}>
+      <p>{`${totalFils}@${formatMoney(filPrice)}`}</p>
       <ul>
         {paidEntries.map(([time, amount], i) => (
           <li key={i}>
-            <span>{sheetsDayToDate(time).toLocaleDateString()}</span>
-            <span>{' - '}</span>
+            <span>{time}</span>
             <span>{formatUsd(amount)}</span>
           </li>
         ))}
       </ul>
+      <MoneyBadge usdAmount={balanceChanges} usdPrice={usdPrice} />
       <MoneyBadge usdAmount={totalFils * filPrice} usdPrice={usdPrice} />
     </div>
   )
 }
+const StyledHome = styled(Home)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-export default Home
+  ul {
+    padding: 0;
+    width: calc(100% - 0.4rem);
+    margin: auto;
+    list-style: none;
+
+    li {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+`
+
+export default StyledHome
 
 const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 
