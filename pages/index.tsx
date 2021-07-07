@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import type { CoinStats } from './api/coins'
+import type { FC } from '../global'
 
 const formatMoney = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
