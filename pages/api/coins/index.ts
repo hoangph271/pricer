@@ -57,7 +57,6 @@ export default async function handler (_: NextApiRequest, res: NextApiResponse) 
 
   const totalSpent = paidEntries.reduce((sum, entry) => entry.amountVnd + sum, 0)
   const totalFils = paidEntries.reduce((sum, entry) => entry.amountFil + sum, 0)
-  // 5.06243665 // ! FIXME: Don't hardcode
 
   const [
     filPrice,
