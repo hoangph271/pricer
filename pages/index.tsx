@@ -41,10 +41,10 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
     <div className={className}>
       <p>{`${totalFils}@${formatMoney(filPrice)}`}</p>
       <ul>
-        {paidEntries.map(([time, amount], i) => (
+        {paidEntries.map((entry, i) => (
           <li key={i}>
-            <span>{time}</span>
-            <span>{formatUsd(amount)}</span>
+            <span>{entry.date}</span>
+            <span>{formatUsd(entry.amountVnd / usdPrice)}</span>
           </li>
         ))}
       </ul>

@@ -16,15 +16,18 @@ const getFilPrice = async (): Promise<number> => {
   })
 }
 
-type PaidEntry = [string, number]
+type PaidEntry = {
+  date: string,
+  amountVnd: number,
+  amountFil: number
+}
 const paidEntries: PaidEntry[] = [
-  ['6/22/2021', 2_747_058],
-  ['6/23/2021', 2_000_000],
-  ['6/29/2021', 579_790],
-  ['6/30/2021', 333_742],
-  ['6/30/2021', 200_000],
-  ['7/1/2021', 604_777]
-]
+  ['2021-06-22 17:14:57', 2_747_058, 2.2766],
+  ['2021-06-23 20:56:01', 2_000_000, 1.55307328],
+  ['2021-06-29 17:08:47', 579_790, 0.41705047],
+  ['2021-06-30 06:01:21', 433_742, 0.35828591],
+  ['2021-07-02 12:07:45', 604_777, 0.45742699]
+].map(([date, amountVnd, amountFil]) => ({ date, amountVnd, amountFil }) as PaidEntry)
 
 export type CoinStats = {
   totalFils: number,
@@ -52,8 +55,9 @@ export default async function handler (_: NextApiRequest, res: NextApiResponse) 
 
   const sheets = google.sheets({ version: 'v4', auth })
 
-  const totalSpent = paidEntries.reduce((sum, [_, amount]) => amount + sum, 0)
-  const totalFils = 5.06243665 // ! FIXME: Don't hardcode
+  const totalSpent = paidEntries.reduce((sum, entry) => entry.amountVnd + sum, 0)
+  const totalFils = paidEntries.reduce((sum, entry) => entry.amountFil + sum, 0)
+  // 5.06243665 // ! FIXME: Don't hardcode
 
   const [
     filPrice,
@@ -69,10 +73,7 @@ export default async function handler (_: NextApiRequest, res: NextApiResponse) 
     totalFils,
     filPrice,
     balanceChanges,
-    paidEntries: paidEntries.map(([sheetsDate, amountVnd]) => ([
-      sheetsDate,
-      amountVnd / usdPrice as number
-    ])),
+    paidEntries,
     usdPrice
   }
 
