@@ -1,6 +1,8 @@
-@import 'https://fonts.googleapis.com/css?family=Press+Start+2P';
-@import 'https://unpkg.com/nes.css@2.3.0/css/nes.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
 
+* {
+  font-family: 'Source Code Pro', monospace;
+}
 html,
 body {
   padding: 0;

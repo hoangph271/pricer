@@ -1,3 +1,3 @@
 import type React from 'react'
 
-export type FC<T> = React.FC<T & { className?: string }>
+export type FC<T = any> = React.FC<T & { className?: string }>

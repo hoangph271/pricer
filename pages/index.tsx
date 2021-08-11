@@ -3,36 +3,26 @@ import styled from 'styled-components'
 import type { CoinStats } from './api/coins'
 import type { FC } from '../global'
 
-const formatMoney = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 4,
-    minimumFractionDigits: 4
-  }).format(amount)
-}
-const formatUsd = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 4,
-    minimumFractionDigits: 4
-  }).format(amount)
-}
-const formatVnd = (amount: number) => {
-  return `${Math.floor(amount).toLocaleString()} VND`
-}
+import { API_ROOT, formatUsd, formatVnd, formatMoney } from '../utils'
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number }> = (props) => {
-  const { usdAmount, usdPrice } = props
+  const { usdAmount, usdPrice, className } = props
   const [showInUsd, setShowInUsd] = useState(true)
 
   return (
-    <div className="nes-badge" onClick={() => setShowInUsd(!showInUsd)} style={{ width: '13rem' }}>
+    <div className={className} onClick={() => setShowInUsd(!showInUsd)} style={{ width: '13rem' }}>
       <span className={`is-${usdAmount > 0 ? 'success' : 'error'}`}>
         <span>{showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)}</span>
       </span>
     </div>
   )
 }
+const StyledMoneyBadge = styled(MoneyBadge)`
+  .is-success {
+    color: green;
+  }
+`
+
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const { className } = props
   const { balanceChanges, totalFils, filPrice, paidEntries, usdPrice } = props.coinStats
@@ -48,8 +38,8 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
           </li>
         ))}
       </ul>
-      <MoneyBadge usdAmount={balanceChanges} usdPrice={usdPrice} />
-      <MoneyBadge usdAmount={totalFils * filPrice} usdPrice={usdPrice} />
+      <StyledMoneyBadge usdAmount={balanceChanges} usdPrice={usdPrice} />
+      <StyledMoneyBadge usdAmount={totalFils * filPrice} usdPrice={usdPrice} />
     </div>
   )
 }
@@ -73,8 +63,6 @@ const StyledHome = styled(Home)`
 `
 
 export default StyledHome
-
-const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 
 export async function getServerSideProps () {
   const res = await fetch(`${API_ROOT}/coins/`)
