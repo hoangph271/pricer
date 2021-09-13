@@ -4,6 +4,7 @@
     "next/core-web-vitals"
   ],
   "rules": {
+    "multiline-ternary": 0,
     "object-curly-newline": [
       "error",
       {
@@ -198,10 +199,6 @@
       {
         "exceptAfterSingleLine": true
       }
-    ],
-    "multiline-ternary": [
-      "error",
-      "always-multiline"
     ],
     "new-cap": [
       "error",
