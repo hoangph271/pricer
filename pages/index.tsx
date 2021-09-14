@@ -113,9 +113,10 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         </div>
       </div>
       <p style={{ margin: '0' }}>
-        {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
-        <span>{' - '}</span>
-        {formatUsd(coinSpent)}
+        <div>
+          {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
+        </div>
+        <div>{`[${formatUsd(coinSpent)}]`}</div>
       </p>
       <ul>
         {coinEntries.map((entry, i) => (
