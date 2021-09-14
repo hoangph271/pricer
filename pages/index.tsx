@@ -56,7 +56,7 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
         </span>
       ) : (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${formatUsd(entry.amountUsd / entry.amountFil).replace(/\$/, '@')}`}
+          {`${formatUsd(entry.amountUsd / entry.amount).replace(/\$/, '@')}`}
         </span>
       )}
     </li>
@@ -64,21 +64,44 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
 }
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const { balanceChanges, totalFils, filPrice, paidEntries, usdPrice } = props.coinStats
+  const { totalHave, totalSpent, paids, usdPrice } = props.coinStats
+  const [coinName, setCoinName] = useState('FIL')
+
+  const coinEntries = paids[coinName]
+  const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
+  const coinPrice = (props.coinStats as any)[`${coinName.toLowerCase()}Price`] as number
 
   return (
     <div className="home">
-      <p>{`${totalFils.toFixed(4)}@${formatMoney(filPrice)}`}</p>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <MoneyBadge title="Earn" usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
+        <MoneyBadge title="Have" usdAmount={totalHave} usdPrice={usdPrice} />
+        <MoneyBadge title="Cost" usdAmount={totalSpent} usdPrice={usdPrice} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100vw' }}>
+        <div>
+          <button
+            className={`nes-btn is-${coinName === 'FIL' ? 'success' : ''}`}
+            onClick={() => setCoinName('FIL')}
+          >
+            FIL
+          </button>
+          <button
+            className={`nes-btn is-${coinName === 'ADA' ? 'success' : ''}`}
+            onClick={() => setCoinName('ADA')}
+          >
+            ADA
+          </button>
+        </div>
+        <p style={{ margin: '0' }}>
+          {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
+        </p>
+      </div>
       <ul>
-        {paidEntries.map((entry, i) => (
+        {coinEntries.map((entry, i) => (
           <Entry entry={entry} key={i} />
         ))}
       </ul>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <MoneyBadge title="Earn" usdAmount={balanceChanges} usdPrice={usdPrice} />
-        <MoneyBadge title="Have" usdAmount={totalFils * filPrice} usdPrice={usdPrice} />
-        <MoneyBadge title="Cost" usdAmount={totalFils * filPrice - balanceChanges} usdPrice={usdPrice} />
-      </div>
     </div>
   )
 }
