@@ -67,56 +67,72 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
   )
 }
 
-const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const { totalHave, totalSpent, paids, usdPrice } = props.coinStats
-  const [coinName, setCoinName] = useState('FIL')
+const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
+  const { totalHave, totalSpent, usdPrice } = props.coinStats
 
-  const coinEntries = paids[coinName]
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <span>
+        <MoneyBadge usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
+        <span>{'/'}</span>
+        <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} />
+      </span>
+      <span className="total-have">
+        <span>{'['}</span>
+        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} />
+        <span>{']'}</span>
+      </span>
+  </div>
+  )
+}
+const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
+  const { paids } = props.coinStats
+  const coinNames = Object.keys(paids)
+
+  const [displayCoinName, setDisplayCoinName] = useState(coinNames[0])
+
+  const coinEntries = paids[displayCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
-  const coinPrice = (props.coinStats as any)[`${coinName.toLowerCase()}Price`] as number
+  const coinPrice = (props.coinStats as any)[`${displayCoinName.toLowerCase()}Price`] as number
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
 
   return (
-    <div className="home">
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span>
-          <MoneyBadge usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
-          <span>{'/'}</span>
-          <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} />
-        </span>
-        <span className="total-have">
-          <span>{'('}</span>
-          <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} />
-          <span>{')'}</span>
-        </span>
-      </div>
+    <div style={{ width: '100vw' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>
-          <button
-            className={`nes-btn is-${coinName === 'FIL' ? 'success' : ''}`}
-            onClick={() => setCoinName('FIL')}
-          >
-            FIL
-          </button>
-          <button
-            className={`nes-btn is-${coinName === 'ADA' ? 'success' : ''}`}
-            onClick={() => setCoinName('ADA')}
-          >
-            ADA
-          </button>
+          {coinNames.map(coinName => (
+            <button
+              key={coinName}
+              style={{ margin: '0.4rem' }}
+              onClick={() => setDisplayCoinName(coinName)}
+              className={`nes-btn is-${coinName === displayCoinName ? 'success' : ''}`}
+            >
+              {coinName}
+            </button>
+          ))}
         </div>
       </div>
       <p style={{ margin: '0' }}>
         {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
+        <span>{' - '}</span>
+        {formatUsd(coinSpent)}
       </p>
       <ul>
         {coinEntries.map((entry, i) => (
           <Entry entry={entry} key={i} />
         ))}
       </ul>
-      <div>
-        {`[${formatUsd(coinSpent)}]`}
-      </div>
+    </div>
+  )
+}
+
+const Home: FC<{ coinStats: CoinStats }> = (props) => {
+  const { coinStats } = props
+
+  return (
+    <div className="home">
+      <AssetSummary coinStats={coinStats} />
+      <CoinPaidSummary coinStats={coinStats} />
     </div>
   )
 }
