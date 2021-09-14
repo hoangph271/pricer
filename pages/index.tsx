@@ -89,6 +89,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { paids } = props.coinStats
   const coinNames = Object.keys(paids)
 
+  const [earnInUsd, setEarnInUsd] = useState(false)
   const [displayCoinName, setDisplayCoinName] = useState(coinNames[0])
 
   const coinEntries = paids[displayCoinName]
@@ -113,20 +114,23 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           ))}
         </div>
       </div>
-      <p style={{ margin: '0' }}>
+      <div style={{ margin: '0' }}>
         <div>
           {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
         </div>
         <div>
           <span>{'['}</span>
-          <span style={{ color: coinEarnRatio > 1 ? 'green' : 'red' }}>
-            {`${(coinEarnRatio * 100).toFixed(2)}%`}
+          <span
+            onClick={() => setEarnInUsd(prev => !prev)}
+            style={{ color: coinEarnRatio > 1 ? 'green' : 'red' }}
+          >
+            {earnInUsd ? formatUsd((coinEarnRatio - 1) * coinSpent) : `${(coinEarnRatio * 100).toFixed(2)}%`}
           </span>
           <span>{' - '}</span>
           <span>{formatUsd(coinSpent)}</span>
           <span>{']'}</span>
         </div>
-      </p>
+      </div>
       <ul>
         {coinEntries.map((entry, i) => (
           <Entry entry={entry} key={i} />
