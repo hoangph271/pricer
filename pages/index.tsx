@@ -95,6 +95,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
   const coinPrice = (props.coinStats as any)[`${displayCoinName.toLowerCase()}Price`] as number
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
+  const coinEarnRatio = (coinPrice * totalCoins) / coinSpent
 
   return (
     <div style={{ width: '100vw' }}>
@@ -116,7 +117,15 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         <div>
           {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
         </div>
-        <div>{`[${formatUsd(coinSpent)}]`}</div>
+        <div>
+          <span>{'['}</span>
+          <span style={{ color: coinEarnRatio > 1 ? 'green' : 'red' }}>
+            {`${(coinEarnRatio * 100).toFixed(2)}%`}
+          </span>
+          <span>{' - '}</span>
+          <span>{formatUsd(coinSpent)}</span>
+          <span>{']'}</span>
+        </div>
       </p>
       <ul>
         {coinEntries.map((entry, i) => (
