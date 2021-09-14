@@ -12,8 +12,8 @@ const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    maximumFractionDigits: 4,
-    minimumFractionDigits: 4
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2
   }).format(amount)
 }
 const formatVnd = (amount: number) => {
@@ -28,18 +28,22 @@ const formatDate = (date: string) => {
   ].join('/')
 }
 
-const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title: string }> = (props) => {
+const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
   const { usdAmount, usdPrice, title } = props
   const [showInUsd, setShowInUsd] = useState(true)
 
   const money = showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)
 
   return (
-    <div className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
+    <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
       <span className={`is-${usdAmount > 0 ? 'success' : 'error'}`}>
-        <span>{`${title}: ${money}`}</span>
+        {title ? (
+          <span>{`${title}: ${money}`}</span>
+        ) : (
+          <span>{money}</span>
+        )}
       </span>
-    </div>
+    </span>
   )
 }
 
@@ -75,9 +79,16 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
   return (
     <div className="home">
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <MoneyBadge title="Earn" usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
-        <MoneyBadge title="Have" usdAmount={totalHave} usdPrice={usdPrice} />
-        <MoneyBadge title="Cost" usdAmount={totalSpent} usdPrice={usdPrice} />
+        <span>
+          <MoneyBadge usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
+          <span>{'/'}</span>
+          <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} />
+        </span>
+        <span className="total-have">
+          <span>{'('}</span>
+          <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} />
+          <span>{')'}</span>
+        </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>
@@ -104,7 +115,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
         ))}
       </ul>
       <div>
-        {`[$${formatMoney(coinSpent)}]`}
+        {`[${formatUsd(coinSpent)}]`}
       </div>
     </div>
   )

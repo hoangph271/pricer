@@ -42,3 +42,6 @@ a {
 .not-badge .is-error {
   color: red;
 }
+.total-have {
+  display: block;
+}
