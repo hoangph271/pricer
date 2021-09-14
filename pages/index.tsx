@@ -70,6 +70,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const coinEntries = paids[coinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
   const coinPrice = (props.coinStats as any)[`${coinName.toLowerCase()}Price`] as number
+  const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
 
   return (
     <div className="home">
@@ -102,6 +103,9 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
           <Entry entry={entry} key={i} />
         ))}
       </ul>
+      <div>
+        {`[$${formatMoney(coinSpent)}]`}
+      </div>
     </div>
   )
 }
