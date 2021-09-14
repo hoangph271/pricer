@@ -78,7 +78,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
         <MoneyBadge title="Have" usdAmount={totalHave} usdPrice={usdPrice} />
         <MoneyBadge title="Cost" usdAmount={totalSpent} usdPrice={usdPrice} />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100vw' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>
           <button
             className={`nes-btn is-${coinName === 'FIL' ? 'success' : ''}`}
@@ -93,10 +93,10 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
             ADA
           </button>
         </div>
-        <p style={{ margin: '0' }}>
-          {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
-        </p>
       </div>
+      <p style={{ margin: '0' }}>
+        {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
+      </p>
       <ul>
         {coinEntries.map((entry, i) => (
           <Entry entry={entry} key={i} />
