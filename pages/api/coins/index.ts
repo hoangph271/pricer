@@ -83,7 +83,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     getPrices('FIL', 'ADA'),
     getValues('C7')
   ])
-  console.info(filPrice, adaPrice)
 
   const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
   const totalHave = paidEntries.ADA.reduce(priceReducer(adaPrice), 0) +
