@@ -39,7 +39,8 @@ const paidEntries: Record<string, PaidEntry[]> = {
     ['2021-08-08 07:07:11', 65, 0.93932672]
   ].map((toPaidEntry('FIL') as any)),
   ADA: [
-    ['2021-09-14 12:42:16', 23.8699, 10]
+    ['2021-09-14 12:42:16', 23.8699, 10],
+    ['2021-09-14 17:46:27', 27.5901, 11.4961624]
   ].map((toPaidEntry('ADA') as any))
 }
 
