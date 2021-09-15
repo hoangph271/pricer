@@ -22,10 +22,7 @@ const formatVnd = (amount: number) => {
 const formatDate = (date: string) => {
   const _date = new Date(date)
 
-  return [
-    _date.getDate().toString().padStart(2, '0'),
-    (_date.getMonth() + 1).toString().padStart(2, '0')
-  ].join('/')
+  return _date.toLocaleDateString()
 }
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
