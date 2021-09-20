@@ -154,10 +154,11 @@ const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 
 export async function getServerSideProps () {
   const res = await fetch(`${API_ROOT}/coins/`)
+  const text = await res.text()
 
   return {
     props: {
-      coinStats: await res.json() as CoinStats
+      coinStats: JSON.parse(text) as CoinStats
     }
   }
 }

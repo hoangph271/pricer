@@ -41,12 +41,16 @@ const paidEntries: Record<string, PaidEntry[]> = {
   ADA: [
     ['2021-09-14 12:42:16', 23.8699, 10],
     ['2021-09-14 17:46:27', 27.5901, 11.4961624]
-  ].map((toPaidEntry('ADA') as any))
+  ].map((toPaidEntry('ADA') as any)),
+  ETH: [
+    ['2021-09-20 07:50:25', 22.89, 0.00697167]
+  ].map(toPaidEntry('ETH') as any)
 }
 
 export type CoinStats = {
   filPrice: number,
   adaPrice: number,
+  ethPrice: number,
   usdPrice: number,
   totalHave: number,
   totalSpent: number,
@@ -77,20 +81,22 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const totalSpent = allEntries.reduce((sum, entry) => entry.amountUsd + sum, 0)
 
   const [
-    [adaPrice, filPrice],
+    [adaPrice, ethPrice, filPrice],
     [[usdPrice]]
   ] = await Promise.all([
-    getPrices('FIL', 'ADA'),
+    getPrices('ADA', 'ETH', 'FIL'),
     getValues('C7')
   ])
 
   const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
   const totalHave = paidEntries.ADA.reduce(priceReducer(adaPrice), 0) +
-    paidEntries.FIL.reduce(priceReducer(filPrice), 0)
+    paidEntries.FIL.reduce(priceReducer(filPrice), 0) +
+    paidEntries.ETH.reduce(priceReducer(ethPrice), 0)
 
   const resBody: CoinStats = {
     filPrice,
     adaPrice,
+    ethPrice,
     totalHave,
     totalSpent,
     paids: paidEntries,
