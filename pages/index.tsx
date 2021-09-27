@@ -48,6 +48,8 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
   const { entry } = props
   const [showAmount, setShowAmount] = useState(false)
 
+  const usdPrice = formatMoney(entry.amountUsd / entry.amount)
+
   return (
     <li>
       <span>{formatDate(entry.date)}</span>
@@ -57,7 +59,7 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
         </span>
       ) : (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${formatUsd(entry.amountUsd / entry.amount).replace(/\$/, '@')}`}
+          {`${entry.amount.toFixed(4)}@${usdPrice}`}
         </span>
       )}
     </li>
