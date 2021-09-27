@@ -59,7 +59,7 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
         </span>
       ) : (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${entry.amount.toFixed(3)}@${usdPrice}`}
+          {`@${usdPrice}`}
         </span>
       )}
     </li>
