@@ -2,10 +2,10 @@ import { useState } from 'react'
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 
-const formatMoney = (amount: number) => {
+const formatMoney = (amount: number, digits = 4) => {
   return new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 4,
-    minimumFractionDigits: 4
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits
   }).format(amount)
 }
 const formatUsd = (amount: number) => {
@@ -48,10 +48,10 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
   const { entry } = props
   const [showAmount, setShowAmount] = useState(false)
 
-  const usdPrice = formatMoney(entry.amountUsd / entry.amount)
+  const usdPrice = formatMoney(entry.amountUsd / entry.amount, 2)
 
   return (
-    <li>
+    <li style={{ display: 'flex', gap: '0', columnGap: '1rem', flexWrap: 'wrap' }}>
       <span>{formatDate(entry.date)}</span>
       {showAmount ? (
         <span onClick={() => setShowAmount(prev => !prev)}>
@@ -59,7 +59,7 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
         </span>
       ) : (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${entry.amount.toFixed(4)}@${usdPrice}`}
+          {`${entry.amount.toFixed(3)}@${usdPrice}`}
         </span>
       )}
     </li>
@@ -98,8 +98,8 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinEarnRatio = (coinPrice * totalCoins) / coinSpent
 
   return (
-    <div style={{ width: '100vw' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="col-flex-mini-gap">
+      <div className="col-flex-mini-gap">
         <div>
           {coinNames.map(coinName => (
             <button
