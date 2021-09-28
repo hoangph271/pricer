@@ -22,7 +22,10 @@ const formatVnd = (amount: number) => {
 const formatDate = (date: string) => {
   const _date = new Date(date)
 
-  return _date.toLocaleDateString()
+  return [
+    _date.getDate().toString().padStart(2, '0'),
+    _date.getMonth().toString().padStart(2, '0')
+  ].join('/')
 }
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
@@ -45,21 +48,21 @@ const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = 
 }
 
 const Entry: FC<{ entry: PaidEntry }> = props => {
-  const { entry } = props
+  const { entry: { amount, amountUsd, date } } = props
   const [showAmount, setShowAmount] = useState(false)
 
-  const usdPrice = formatMoney(entry.amountUsd / entry.amount, 2)
+  const usdPrice = formatMoney(amountUsd / amount, 2)
 
   return (
     <li style={{ display: 'flex', gap: '0', columnGap: '1rem', flexWrap: 'wrap' }}>
-      <span>{formatDate(entry.date)}</span>
+      <span>{formatDate(date)}</span>
       {showAmount ? (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${formatUsd(entry.amountUsd)}`}
+          {`${formatUsd(amountUsd)}`}
         </span>
       ) : (
         <span onClick={() => setShowAmount(prev => !prev)}>
-          {`@${usdPrice}`}
+          {`${formatMoney(amount)}@${usdPrice}`}
         </span>
       )}
     </li>
@@ -97,6 +100,17 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
   const coinEarnRatio = (coinPrice * totalCoins) / coinSpent
 
+  const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
+  coinEntries.forEach((entry, i) => {
+    const year = new Date(entry.date).getFullYear()
+
+    if (coinEntriesByYear.has(year)) {
+      coinEntriesByYear.get(year)!.push(entry)
+    } else {
+      coinEntriesByYear.set(year, [entry])
+    }
+  })
+
   return (
     <div className="col-flex-mini-gap">
       <div className="col-flex-mini-gap">
@@ -130,11 +144,18 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           <span>{']'}</span>
         </div>
       </div>
-      <ul>
-        {coinEntries.map((entry, i) => (
-          <Entry entry={entry} key={i} />
-        ))}
-      </ul>
+      {Array.from(coinEntriesByYear.keys()).map(year => (
+        <div key={year}>
+          <h4 style={{ fontWeight: 'normal' }}>
+          {`- ${year} -`}
+          </h4>
+          <ul>
+            {coinEntriesByYear.get(year)!.map((entry, i) => (
+              <Entry entry={entry} key={i} />
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   )
 }

@@ -25,13 +25,14 @@ a {
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding-top: 0.5rem;
+  /* justify-content: center; */
   align-items: center;
 }
 
 .home {
   width: 800px;
-  max-width: calc(100vw - 10px);
+  max-width: calc(100vw - 1rem);
   flex-basis: 0;
   flex-direction: column;
   align-items: center;
