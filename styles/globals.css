@@ -5,6 +5,15 @@ html,
 body {
   padding: 0;
   margin: 0;
+  height: 100%;
+}
+
+body {
+  background-image: url('/bgr.png');
+  background-size: cover;
+  background-position: center;
+  background-position-x: left;
+  background-repeat: no-repeat;
 }
 
 a {
@@ -17,16 +26,9 @@ a {
 }
 
 #__next {
-  min-height: 100vh;
-  background-image: url('/bgr.png');
-  background-size: cover;
-  background-position: center;
-  background-position-x: left;
-  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   padding-top: 0.5rem;
-  /* justify-content: center; */
   align-items: center;
 }
 
