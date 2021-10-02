@@ -1,12 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 class PricerDocument extends Document {
-  static async getInitialProps(ctx: any) {
+  static async getInitialProps (ctx: any) {
     const initialProps = await Document.getInitialProps(ctx)
     return { ...initialProps }
   }
 
-  render() {
+  render () {
     return (
       <Html>
         <Head>
