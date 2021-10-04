@@ -32,6 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# PWA
 public/sw.js.map
 public/sw.js
-public/workbox-1ffba242.js
+public/workbox-*.js
