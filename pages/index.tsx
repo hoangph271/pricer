@@ -3,10 +3,14 @@ import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 
 const formatMoney = (amount: number, digits = 4) => {
-  return new Intl.NumberFormat('en-US', {
+  const formatOptions = amount >= 1000 ? {
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0
+  } : {
     maximumFractionDigits: digits,
     minimumFractionDigits: digits
-  }).format(amount)
+  }
+  return new Intl.NumberFormat('en-US', formatOptions).format(amount)
 }
 const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
