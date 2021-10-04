@@ -6,9 +6,12 @@ body {
   padding: 0;
   margin: 0;
   height: 100%;
+  min-height: -webkit-fill-available;
 }
 
 body {
+  min-height: calc(100% - 1rem);
+  min-height: -webkit-fill-available;
   background-image: url('/hob.jpg');
   background-size: cover;
   background-position: center;
@@ -35,7 +38,6 @@ a {
 .home {
   width: 800px;
   max-width: calc(100vw - 1rem);
-  min-height: calc(100vh - 1rem);
   border-radius: 0.5rem;
   flex-basis: 0;
   flex-direction: column;
