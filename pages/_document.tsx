@@ -10,7 +10,10 @@ class PricerDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="shortcut icon" href="https://www.runicgames.com/images/hob-marquee-char.png" />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/icon.png"></link>
+          <meta name="theme-color" content="#fff" />
+          <link rel="shortcut icon" href="/favicon.png" />
         </Head>
         <body>
           <Main />
