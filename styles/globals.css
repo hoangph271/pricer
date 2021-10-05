@@ -15,7 +15,6 @@ body {
   background-image: url('/hob.jpg');
   background-size: cover;
   background-position: center;
-  background-position-x: left;
   background-repeat: no-repeat;
 }
 
