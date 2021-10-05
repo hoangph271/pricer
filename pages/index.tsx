@@ -24,7 +24,11 @@ const formatVnd = (amount: number) => {
   return `${Math.floor(amount).toLocaleString()} VND`
 }
 const formatDate = (date: string) => {
-  const _date = new Date(date)
+  // ? Replace all `-` in the date string by `/`
+  // * Because Safari is good at SUCKING
+  // * And its handling of date string in YYYY-MM-DD format SUCKS, as expected
+  const escapedDate = date.replace(/-/g, '/')
+  const _date = new Date(escapedDate)
 
   return [
     _date.getDate().toString().padStart(2, '0'),
