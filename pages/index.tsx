@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { CoinStats } from './api/coins'
+import { signIn, useSession } from 'next-auth/react'
 import type { FC, PaidEntry } from '../global'
 import { formatUsd, formatVnd, formatMoney, formatDate } from '../lib/formatters'
+import Head from 'next/head'
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
   const { usdAmount, usdPrice, title } = props
@@ -137,10 +139,22 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const { coinStats } = props
-  const isAuthed = false
+  const { data, status } = useSession()
+
+  console.info(status, data)
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      signIn()
+    }
+  }, [status])
+
+  if (status !== 'authenticated') return null
 
   return (
-    <div className="home" style={{ display: isAuthed ? '' : 'none' }}>
+    <div className="home">
+      <Head>
+        <title>{'#Pricer'}</title>
+      </Head>
       <AssetSummary coinStats={coinStats} />
       <CoinPaidSummary coinStats={coinStats} />
     </div>
