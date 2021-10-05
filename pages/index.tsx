@@ -1,40 +1,7 @@
 import { useState } from 'react'
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
-
-const formatMoney = (amount: number, digits = 4) => {
-  const formatOptions = amount >= 1000 ? {
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0
-  } : {
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits
-  }
-  return new Intl.NumberFormat('en-US', formatOptions).format(amount)
-}
-const formatUsd = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2
-  }).format(amount)
-}
-const formatVnd = (amount: number) => {
-  return `${Math.floor(amount).toLocaleString()} VND`
-}
-const formatDate = (date: string) => {
-  // ? Replace all `-` in the date string by `/`
-  // * Because Safari is good at SUCKING
-  // * And its handling of date string in YYYY-MM-DD format SUCKS, as expected
-  const escapedDate = date.replace(/-/g, '/')
-  const _date = new Date(escapedDate)
-
-  return [
-    _date.getDate().toString().padStart(2, '0'),
-    _date.getMonth().toString().padStart(2, '0')
-  ].join('/')
-}
+import { formatUsd, formatVnd, formatMoney, formatDate } from '../lib/formatters'
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
   const { usdAmount, usdPrice, title } = props
@@ -170,9 +137,10 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const { coinStats } = props
+  const isAuthed = false
 
   return (
-    <div className="home">
+    <div className="home" style={{ display: isAuthed ? '' : 'none' }}>
       <AssetSummary coinStats={coinStats} />
       <CoinPaidSummary coinStats={coinStats} />
     </div>
