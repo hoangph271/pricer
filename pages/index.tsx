@@ -166,12 +166,13 @@ export default Home
 const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 
 export async function getServerSideProps () {
+  // TODO: fetch always 401 because session is not included
   const res = await fetch(`${API_ROOT}/coins/`)
-  const text = await res.text()
+  console.info('/coins/', res.statusText)
 
   return {
     props: {
-      coinStats: JSON.parse(text) as CoinStats
+      coinStats: res.ok ? (await res.json() as CoinStats) : null
     }
   }
 }
