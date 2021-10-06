@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { google } from 'googleapis'
 import fetch from 'node-fetch'
-import { cors, runMiddleware } from '../_api_helpers'
+import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { getSession } from 'next-auth/react'
 import HttpStatus from 'http-status'
@@ -64,9 +64,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const session = await getSession({ req })
 
   if (!session) {
-    return res
-      .status(HttpStatus.UNAUTHORIZED)
-      .send(HttpStatus['401_NAME'])
+    return statusRes(res, HttpStatus.UNAUTHORIZED)
   }
 
   const { client_id, client_secret, redirect_uris } = credentials.installed
