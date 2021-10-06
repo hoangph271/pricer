@@ -1,13 +1,10 @@
 // @ts-nocheck
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { HARD_CODED_ACCOUNT, SECRET } from '../../../lib/constants'
 
-const HARD_CODED_ACCOUNT = {
-  username: 'alpha-sneu',
-  password: '0420#Pricer...!'
-}
 export default NextAuth({
-  secret: Object.values(HARD_CODED_ACCOUNT).join(''),
+  secret: SECRET,
   providers: [
     // ? FIXME: Correct the TS checking & remove // @ts-nocheck
     CredentialsProvider({

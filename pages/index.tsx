@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import type { CoinStats } from './api/coins'
-import { signIn, useSession } from 'next-auth/react'
-import type { FC, PaidEntry } from '../global'
-import { formatUsd, formatVnd, formatMoney, formatDate } from '../lib/formatters'
 import Head from 'next/head'
+import { signIn, useSession } from 'next-auth/react'
+import { formatUsd, formatVnd, formatMoney, formatDate } from '../lib/formatters'
+
+import type { CoinStats } from './api/coins'
+import type { FC, PaidEntry } from '../global'
+import { GetServerSideProps } from 'next'
 
 const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
   const { usdAmount, usdPrice, title } = props
@@ -165,13 +167,18 @@ export default Home
 
 const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 
-export async function getServerSideProps () {
-  const res = await fetch(`${API_ROOT}/coins/`)
-  const text = await res.text()
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const res = await fetch(`${API_ROOT}/coins/`, {
+    headers: {
+      cookie: ctx.req?.headers.cookie ?? ''
+    }
+  })
+
+  console.info('/coins/', res.statusText)
 
   return {
     props: {
-      coinStats: JSON.parse(text) as CoinStats
+      coinStats: res.ok ? (await res.json() as CoinStats) : null
     }
   }
 }
