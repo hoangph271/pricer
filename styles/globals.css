@@ -30,7 +30,9 @@ a {
 #__next {
   display: flex;
   flex-direction: column;
-  padding-top: 0.5rem;
+  max-height: 100vh;
+  padding: 0.5rem 0;
+  overflow: auto;
   align-items: center;
 }
 
