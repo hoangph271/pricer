@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { signIn, useSession } from 'next-auth/react'
-import { formatUsd, formatVnd, formatMoney, formatDate } from '../lib/formatters'
+import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
 
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
@@ -80,8 +80,8 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinEarnRatio = (coinPrice * totalCoins) / coinSpent
 
   const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
-  coinEntries.forEach((entry, i) => {
-    const year = new Date(entry.date).getFullYear()
+  coinEntries.forEach((entry) => {
+    const year = str2Date(entry.date).getFullYear()
 
     if (coinEntriesByYear.has(year)) {
       coinEntriesByYear.get(year)!.push(entry)
