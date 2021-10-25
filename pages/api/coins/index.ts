@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react'
 import HttpStatus from 'http-status'
 import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
-import { paidEntries } from './_paid_entries.tsx'
+import { paidEntries } from './_paid_entries'
 
 const credentials = { installed: { client_id: '551315315389-6keh2vo91kh06ce6d1n21h8oha50l09q.apps.googleusercontent.com', project_id: 'crusty-194406', auth_uri: 'https://accounts.google.com/o/oauth2/auth', token_uri: 'https://oauth2.googleapis.com/token', auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs', client_secret: '7a2vnKGfpeytVNJrWFiuQs1K', redirect_uris: ['urn:ietf:wg:oauth:2.0:oob', 'http://localhost'] } }
 const token = { access_token: 'ya29.a0ARrdaM9-58kuGHUZgPp58a1J6sc5pyuwt8JHtTlqX8LFVOeHnCLc8yO82m6QYrwyqfjcmYk4us3LeZnCfYiGvPLSrirOsVJ-dC4J6qjdaCtRPDiCl99wpyzfkNTrJkUCjk43Ql8dESE3wS1IYLcIBi_X6GAY', refresh_token: '1//0ePaIsKB4KG0dCgYIARAAGA4SNwF-L9Irj0fj-tyqywc_xyHy8FDzVdE2VW7HAWFS-7UJUVud-QD9hRTaR-XQAbY82iOCsj6Z6M0', scope: 'https://www.googleapis.com/auth/spreadsheets.readonly', token_type: 'Bearer', expiry_date: 1625222830174 }
@@ -20,13 +20,6 @@ const getPrices = async (...names: string[]): Promise<number[]> => {
 
     return Object.values(data).map((val: any) => val.quote.USD.price as number)
   })
-}
-
-const toPaidEntry = (name: string) => {
-  return (args: [string, number, number]) => {
-    const [date, amountUsd, amount] = args
-    return ({ name, date, amountUsd, amount }) as PaidEntry
-  }
 }
 
 export type CoinStats = {

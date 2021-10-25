@@ -1,5 +1,12 @@
 import { PaidEntry } from '../../../global'
 
+const toPaidEntry = (name: string) => {
+  return (args: [string, number, number]) => {
+    const [date, amountUsd, amount] = args
+    return ({ name, date, amountUsd, amount }) as PaidEntry
+  }
+}
+
 export const paidEntries: Record<string, PaidEntry[]> = {
   FIL: [
     ['2021-06-22 17:14:57', 118.25, 2.2766],
