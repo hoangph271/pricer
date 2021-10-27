@@ -70,16 +70,7 @@
         "ignoreGlobals": true
       }
     ],
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "never",
-        "objects": "never",
-        "imports": "never",
-        "exports": "never",
-        "functions": "never"
-      }
-    ],
+    "comma-dangle": 0,
     "comma-spacing": [
       "error",
       {
