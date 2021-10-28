@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "yarn build && pm2 restart pricer"
   },
   "dependencies": {
     "cors": "^2.8.5",
