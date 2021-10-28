@@ -11,6 +11,6 @@ module.exports = withPwa({
   experimental: {
     concurrentFeatures: true,
     serverComponents: true,
-    urlImports: []
+    // urlImports: []
   }
 })
