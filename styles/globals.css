@@ -1,6 +1,14 @@
 @import 'https://fonts.googleapis.com/css?family=Press+Start+2P';
 @import 'https://unpkg.com/nes.css@2.3.0/css/nes.min.css';
 
+html {
+  background-image: url('/hob.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 html,
 body {
   padding: 0;
@@ -12,10 +20,7 @@ body {
 body {
   min-height: calc(100% - 1rem);
   min-height: -webkit-fill-available;
-  background-image: url('/hob.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: transparent;
 }
 
 a {
