@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import { signIn, useSession } from 'next-auth/react'
 import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
@@ -141,14 +141,12 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const { coinStats } = props
-  const { data, status } = useSession()
-
-  console.info(status, data)
-  useEffect(() => {
-    if (status === 'unauthenticated') {
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated () {
       signIn()
     }
-  }, [status])
+  })
 
   if (status !== 'authenticated') return null
 
@@ -170,7 +168,7 @@ const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const res = await fetch(`${API_ROOT}/coins/`, {
     headers: {
-      cookie: ctx.req?.headers.cookie ?? ''
+      cookie: ctx.req?.headers?.cookie ?? ''
     }
   })
 

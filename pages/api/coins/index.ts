@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiHandler } from 'next'
 import { google } from 'googleapis'
 import fetch from 'node-fetch'
 import { getSession } from 'next-auth/react'
@@ -16,7 +16,7 @@ const getPrices = async (...names: string[]): Promise<number[]> => {
       'X-CMC_PRO_API_KEY': 'deb827df-a1a6-4ceb-940c-3114e9adca4d'
     }
   }).then(async res => {
-    const { data } = await res.json()
+    const { data } = await res.json() as any
 
     return Object.values(data).map((val: any) => val.quote.USD.price as number)
   })
@@ -31,7 +31,7 @@ export type CoinStats = {
   totalSpent: number,
   paids: Record<string, PaidEntry[]>
 }
-export default async function handler (req: NextApiRequest, res: NextApiResponse) {
+const handler: NextApiHandler<CoinStats> = async (req, res) => {
   await runMiddleware(req, res, cors)
 
   const session = await getSession({ req })
@@ -86,3 +86,5 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
   res.status(200).json(resBody)
 }
+
+export default handler
