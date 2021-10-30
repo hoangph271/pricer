@@ -11,8 +11,10 @@ module.exports = withPwa({
     skipWaiting: true,
   },
   experimental: {
-    concurrentFeatures: true,
-    serverComponents: true,
+    // ? TODO: When this bug is fixed, un-comment concurrentFeatures & serverComponents
+    // * https://github.com/vercel/next.js/issues/30586
+    // concurrentFeatures: true,
+    // serverComponents: true,
     // urlImports: []
   }
 })
