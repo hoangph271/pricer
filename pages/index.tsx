@@ -67,17 +67,19 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
-  const { paids } = props.coinStats
-  const coinNames = Object.keys(paids)
+  const { prices, paids } = props.coinStats
+  const coinNames = Object.keys(prices)
 
   const [earnInUsd, setEarnInUsd] = useState(false)
   const [displayCoinName, setDisplayCoinName] = useState(coinNames[0])
 
   const coinEntries = paids[displayCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
-  const coinPrice = (props.coinStats as any)[`${displayCoinName.toLowerCase()}Price`] as number
+  const coinPrice = props.coinStats.prices[displayCoinName] as number
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
-  const coinEarnRatio = (coinPrice * totalCoins) / coinSpent
+  const coinEarnRatio = coinSpent > 0
+    ? (coinPrice * totalCoins) / coinSpent
+    : 0
 
   const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
   coinEntries.forEach((entry) => {

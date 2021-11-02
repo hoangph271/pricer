@@ -23,12 +23,10 @@ const getPrices = async (...names: string[]): Promise<number[]> => {
 }
 
 export type CoinStats = {
-  filPrice: number,
-  adaPrice: number,
-  ethPrice: number,
-  usdPrice: number,
-  totalHave: number,
-  totalSpent: number,
+  prices: Record<string, number>
+  usdPrice: number
+  totalHave: number
+  totalSpent: number
   paids: Record<string, PaidEntry[]>
 }
 const handler: NextApiHandler<CoinStats> = async (req, res) => {
@@ -60,24 +58,30 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
 
   const allEntries = Object.values(paidEntries).flat(1)
   const totalSpent = allEntries.reduce((sum, entry) => entry.amountUsd + sum, 0)
+  const cryptoSymbols = Object.getOwnPropertyNames(paidEntries).sort()
 
   const [
-    [adaPrice, ethPrice, filPrice],
+    cryptoPrices,
     [[usdPrice]]
   ] = await Promise.all([
-    getPrices('ADA', 'ETH', 'FIL'),
+    getPrices(...cryptoSymbols),
     getValues('C7')
   ])
 
   const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
-  const totalHave = paidEntries.ADA.reduce(priceReducer(adaPrice), 0) +
-    paidEntries.FIL.reduce(priceReducer(filPrice), 0) +
-    paidEntries.ETH.reduce(priceReducer(ethPrice), 0)
+  const totalHave = cryptoSymbols.reduce((prev, val, i) => {
+    const cryptoTotal = paidEntries[val].reduce(priceReducer(cryptoPrices[i]), 0)
+
+    return prev + cryptoTotal
+  }, 0)
+
+  const prices = cryptoSymbols.reduce((prev: any, val, i) => {
+    prev[val] = cryptoPrices[i]
+    return prev
+  }, {})
 
   const resBody: CoinStats = {
-    filPrice,
-    adaPrice,
-    ethPrice,
+    prices,
     totalHave,
     totalSpent,
     paids: paidEntries,

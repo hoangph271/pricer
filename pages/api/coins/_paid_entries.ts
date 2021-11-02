@@ -31,5 +31,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   ].map((toPaidEntry('ADA') as any)),
   ETH: [
     ['2021-09-20 07:50:25', 22.89, 0.00697167]
-  ].map(toPaidEntry('ETH') as any)
+  ].map(toPaidEntry('ETH') as any),
+  LBC: [
+  ].map(toPaidEntry('LBC') as any),
+  BAT: [
+  ].map(toPaidEntry('BAT') as any),
 }
