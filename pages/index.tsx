@@ -7,15 +7,15 @@ import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 import { GetServerSideProps } from 'next'
 
-const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string }> = (props) => {
-  const { usdAmount, usdPrice, title } = props
+const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string, colored?: boolean }> = (props) => {
+  const { usdAmount, usdPrice, title, colored = true } = props
   const [showInUsd, setShowInUsd] = useState(true)
 
   const money = showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)
 
   return (
     <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
-      <span className={`is-${usdAmount > 0 ? 'success' : 'error'}`}>
+      <span className={colored ? `is-${usdAmount > 0 ? 'success' : 'error'}` : ''}>
         {title ? (
           <span>{`${title}: ${money}`}</span>
         ) : (
@@ -67,7 +67,7 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
-  const { prices, paids } = props.coinStats
+  const { prices, paids, usdPrice } = props.coinStats
   const coinNames = Object.keys(prices)
 
   const [earnInUsd, setEarnInUsd] = useState(false)
@@ -121,7 +121,9 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             {earnInUsd ? formatUsd((coinEarnRatio - 1) * coinSpent) : `${(coinEarnRatio * 100).toFixed(2)}%`}
           </span>
           <span>{' - '}</span>
-          <span>{formatUsd(coinSpent)}</span>
+          <span>
+            <MoneyBadge usdAmount={coinSpent} usdPrice={usdPrice} colored={false} />
+          </span>
           <span>{']'}</span>
         </div>
       </div>
