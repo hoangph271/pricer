@@ -7,7 +7,16 @@ import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 import { GetServerSideProps } from 'next'
 
-const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string, colored?: boolean }> = (props) => {
+const getColor = (colored: boolean | string, usdAmount: number) => {
+  if (typeof colored === 'string') return colored
+
+  if (colored) {
+    return usdAmount < 0 ? 'red' : 'green'
+  }
+
+  return ''
+}
+const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string, colored?: boolean | string }> = (props) => {
   const { usdAmount, usdPrice, title, colored = true } = props
   const [showInUsd, setShowInUsd] = useState(true)
 
@@ -15,13 +24,22 @@ const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string, colo
 
   return (
     <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
-      <span className={colored ? `is-${usdAmount > 0 ? 'success' : 'error'}` : ''}>
+      <span style={{ color: getColor(colored, usdAmount) }}>
         {title ? (
           <span>{`${title}: ${money}`}</span>
         ) : (
           <span>{money}</span>
         )}
       </span>
+    </span>
+  )
+}
+const PercentageBadge: FC<{ percentage: number }> = props => {
+  const { percentage } = props
+
+  return (
+    <span style={{ color: percentage < 100 ? 'red' : 'green' }}>
+      {percentage.toFixed(2)}%
     </span>
   )
 }
@@ -60,6 +78,8 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
       </span>
       <span className="total-have">
         <span>{'['}</span>
+        <PercentageBadge percentage={(totalHave / totalSpent) * 100} />
+        <span>{' - '}</span>
         <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} />
         <span>{']'}</span>
       </span>
@@ -114,15 +134,25 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         </div>
         <div>
           <span>{'['}</span>
-          <span
-            onClick={() => setEarnInUsd(prev => !prev)}
-            style={{ color: coinEarnRatio > 1 ? 'green' : 'red' }}
-          >
-            {earnInUsd ? formatUsd((coinEarnRatio - 1) * coinSpent) : `${(coinEarnRatio * 100).toFixed(2)}%`}
+          <span onClick={() => setEarnInUsd(prev => !prev)}>
+            {earnInUsd ? (
+              <span>
+                <MoneyBadge
+                  usdAmount={(coinEarnRatio - 1) * coinSpent}
+                  usdPrice={usdPrice}
+                />
+              </span>
+            ) : (
+              <PercentageBadge percentage={coinEarnRatio * 100} />
+            )}
           </span>
           <span>{' - '}</span>
           <span>
-            <MoneyBadge usdAmount={coinSpent} usdPrice={usdPrice} colored={false} />
+            <MoneyBadge
+              usdPrice={usdPrice}
+              usdAmount={coinSpent}
+              colored={coinEarnRatio < 1 ? 'red' : 'green'}
+            />
           </span>
           <span>{']'}</span>
         </div>
