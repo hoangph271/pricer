@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import PullToRefresh from 'react-simple-pull-to-refresh'
+import { GetServerSideProps } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
 
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
-import { GetServerSideProps } from 'next'
 
 const getColor = (colored: boolean | string, usdAmount: number) => {
   if (typeof colored === 'string') return colored
@@ -174,7 +175,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 }
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const { coinStats } = props
+  const [coinStats, setCoinStats] = useState(props.coinStats)
   const { status } = useSession({
     required: true,
     onUnauthenticated () {
@@ -186,31 +187,52 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
 
   return (
     <div className="home">
-      <Head>
-        <title>{'#Pricer'}</title>
-      </Head>
-      <AssetSummary coinStats={coinStats} />
-      <CoinPaidSummary coinStats={coinStats} />
+      <PullToRefresh
+        onRefresh={async () => {
+          const coinStats = await fetchCoinStats(document.cookie)
+
+          if (!coinStats) {
+            return alert('fetchCoinStats fails')
+          }
+
+          setCoinStats(coinStats)
+        }}
+      >
+        <>
+          <Head>
+            <title>{'#Pricer'}</title>
+          </Head>
+          <AssetSummary coinStats={coinStats} />
+          <CoinPaidSummary coinStats={coinStats} />
+        </>
+      </PullToRefresh>
     </div>
   )
 }
 
 export default Home
 
-const { API_ROOT = 'http://0.0.0.0:3000/api' } = process.env
+const API_ROOT = process.env.API_ROOT ?? 'http://localhost:3000/api'
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+const fetchCoinStats = async (cookie: string) => {
   const res = await fetch(`${API_ROOT}/coins/`, {
     headers: {
-      cookie: ctx.req?.headers?.cookie ?? ''
+      cookie
     }
   })
 
   console.info('/coins/', res.statusText)
 
+  return res.ok
+    ? await res.json() as CoinStats
+    : null
+}
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const coinStats = await fetchCoinStats(ctx.req?.headers?.cookie ?? '')
+
   return {
     props: {
-      coinStats: res.ok ? (await res.json() as CoinStats) : null
+      coinStats
     }
   }
 }

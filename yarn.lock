@@ -4311,6 +4311,11 @@ react-server-dom-webpack@0.0.0-experimental-3c4c1c470-20211021:
     neo-async "^2.6.1"
     object-assign "^4.1.1"
 
+react-simple-pull-to-refresh@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-simple-pull-to-refresh/-/react-simple-pull-to-refresh-1.3.0.tgz#5f7bcd475ea5c33ecd505d097b14f56c3e5e3ce8"
+  integrity sha512-QPFGFsbroh2WoTcLCh3f6peMRfSettYJKCXMS9FNbFav7GWKD2whqACiNLx+Mi+VkP/I+aerB7kEirk+DQx41A==
+
 react@^18.0.0-alpha-6c3dcc7a4-20211027:
   version "18.0.0-alpha-6c3dcc7a4-20211027"
   resolved "https://registry.yarnpkg.com/react/-/react-18.0.0-alpha-6c3dcc7a4-20211027.tgz#d327a4883211236a6972538dada0417a373d837b"
