@@ -174,7 +174,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 }
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const [coinStats, setCoinStats] = useState(props.coinStats)
+  const [coinStats] = useState(props.coinStats)
   const [showRefresh, setShowRefresh] = useState(false)
   const { status } = useSession({
     required: true,
@@ -206,7 +206,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
         </Head>
         <AssetSummary coinStats={coinStats} />
         <CoinPaidSummary coinStats={coinStats} />
-        <i
+        {/* <i
           style={{ display: showRefresh ? '' : 'none' }}
           className="nes-icon is-medium star reload-button"
           onClick={async () => {
@@ -220,7 +220,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
 
             setCoinStats(coinStats)
           }}
-        />
+        /> */}
     </div>
   )
 }
