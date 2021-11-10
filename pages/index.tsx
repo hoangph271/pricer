@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import PullToRefresh from 'react-simple-pull-to-refresh'
 import { GetServerSideProps } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
@@ -176,6 +175,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const [coinStats, setCoinStats] = useState(props.coinStats)
+  const [showRefresh, setShowRefresh] = useState(false)
   const { status } = useSession({
     required: true,
     onUnauthenticated () {
@@ -183,29 +183,42 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
     }
   })
 
+  useEffect(() => {
+    if (!showRefresh) return
+
+    const timer = setTimeout(() => {
+      setShowRefresh(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [showRefresh])
+
   if (status !== 'authenticated') return null
 
   return (
-    <div className="home">
-      <PullToRefresh
-        onRefresh={async () => {
-          const coinStats = await fetchCoinStats(document.cookie)
+    <div className="home"
+      onTouchEndCapture={e => {
+        setShowRefresh(true)
+      }}
+    >
+        <Head>
+          <title>{'#Pricer'}</title>
+        </Head>
+        <AssetSummary coinStats={coinStats} />
+        <CoinPaidSummary coinStats={coinStats} />
+        <i
+          style={{ display: showRefresh ? '' : 'none' }}
+          className="nes-icon is-medium star reload-button"
+          onClick={async () => {
+            const coinStats = await fetchCoinStats(document.cookie)
 
-          if (!coinStats) {
-            return alert('fetchCoinStats fails')
-          }
+            if (!coinStats) {
+              return alert('fetchCoinStats fails')
+            }
 
-          setCoinStats(coinStats)
-        }}
-      >
-        <>
-          <Head>
-            <title>{'#Pricer'}</title>
-          </Head>
-          <AssetSummary coinStats={coinStats} />
-          <CoinPaidSummary coinStats={coinStats} />
-        </>
-      </PullToRefresh>
+            setCoinStats(coinStats)
+          }}
+        />
     </div>
   )
 }
