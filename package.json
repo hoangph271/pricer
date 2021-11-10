@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "yarn && yarn build && pm2 restart pricer"
+    "deploy": "yarn && yarn build && pm2 restart pricer",
+    "deploy:latest": "git pull && yarn deploy"
   },
   "dependencies": {
     "cors": "^2.8.5",

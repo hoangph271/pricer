@@ -210,6 +210,8 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
           style={{ display: showRefresh ? '' : 'none' }}
           className="nes-icon is-medium star reload-button"
           onClick={async () => {
+            setShowRefresh(false)
+
             const coinStats = await fetchCoinStats(document.cookie)
 
             if (!coinStats) {
