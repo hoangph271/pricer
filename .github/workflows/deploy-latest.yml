@@ -19,4 +19,4 @@ jobs:
             username: ${{ secrets.USERNAME }}
             KEY: ${{ secrets.KEY }}
             port: ${{ secrets.PORT }}
-            script: NODE_OPTIONS="--max-old-space-size=4096" && cd /home/algo/pricer && yarn deploy:latest
+            script: export NODE_OPTIONS="--max-old-space-size=4096" && cd /home/algo/pricer && yarn deploy:latest
