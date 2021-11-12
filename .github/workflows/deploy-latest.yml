@@ -17,6 +17,6 @@ jobs:
           with:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
-            password: ${{ secrets.PASSWORD }}
+            KEY: ${{ secrets.KEY }}
             port: ${{ secrets.PORT }}
             script: cd /home/algo/pricer && yarn deploy:latest
