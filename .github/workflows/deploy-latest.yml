@@ -14,9 +14,12 @@ jobs:
     steps:
         - name: deploy using ssh
           uses: appleboy/ssh-action@master
+          env:
+            NODE_OPTIONS: "--max-old-space-size=4096"
           with:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
             KEY: ${{ secrets.KEY }}
             port: ${{ secrets.PORT }}
             script: cd /home/algo/pricer && yarn deploy:latest
+            envs: 
