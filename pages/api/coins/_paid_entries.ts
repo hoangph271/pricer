@@ -29,9 +29,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
     ['2021-10-25 21:24:56', 25, 11.64534792],
     ['2021-10-28 16:41:03', 25, 12.41446434],
   ].map((toPaidEntry('ADA') as any)),
-  ETH: [
-    ['2021-09-20 07:50:25', 22.89, 0.00697167]
-  ].map(toPaidEntry('ETH') as any),
+  // ETH: [
+  //   ['2021-09-20 07:50:25', 22.89, 0.00697167]
+  // ].map(toPaidEntry('ETH') as any),
   LBC: [
   ].map(toPaidEntry('LBC') as any),
   BAT: [
@@ -43,4 +43,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
     ['2021-11-05 14:13:10', 20, 63.0795433],
     ['2021-11-12 20:40:30', 20, 75.71856922]
   ].map(toPaidEntry('TLM') as any),
+  DOT: [
+    ['2021-11-13 17:24:03', 34.15457339, 0.75011746],
+  ].map(toPaidEntry('DOT') as any),
 }
