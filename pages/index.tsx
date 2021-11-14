@@ -131,7 +131,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       </div>
       <div style={{ margin: '0' }}>
         <div>
-          {`${totalCoins.toFixed(4)}@${formatMoney(coinPrice)}`}
+          {`${totalCoins.toFixed(totalCoins > 1000 ? 0 : 4)}@${formatMoney(coinPrice)}`}
         </div>
         <div>
           <span>{'['}</span>
