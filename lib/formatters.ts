@@ -1,4 +1,13 @@
-export const formatMoney = (amount: number, digits = 4) => {
+export const formatMoney = (amount: number, maybeDigits?: number) => {
+  const needsMoreZero = amount < 0.0001
+  let digits = maybeDigits
+
+  if (typeof maybeDigits !== 'number') {
+    digits = needsMoreZero
+      ? 6
+      : 4
+  }
+
   const formatOptions = amount >= 1000 ? {
     maximumFractionDigits: 0,
     minimumFractionDigits: 0
@@ -6,7 +15,12 @@ export const formatMoney = (amount: number, digits = 4) => {
     maximumFractionDigits: digits,
     minimumFractionDigits: digits
   }
-  return new Intl.NumberFormat('en-US', formatOptions).format(amount)
+
+  const formatted = new Intl.NumberFormat('en-US', formatOptions).format(amount)
+
+  return needsMoreZero
+    ? formatted.slice(1)
+    : formatted
 }
 export const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
