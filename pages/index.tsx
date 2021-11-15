@@ -214,9 +214,6 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
   return (
     <div className={`home ${isLoading ? 'is-loading' : ''}`}
       {...longpressBind}
-      onTouchEndCapture={e => {
-        setShowRefresh(true)
-      }}
     >
         <Head>
           <title>{'#Pricer'}</title>
