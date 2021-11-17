@@ -39,10 +39,10 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   BETA: [
     ['2021-11-10 20:47:50', 21.19754, 13]
   ].map(toPaidEntry('BETA') as any),
-  TLM: [
-    ['2021-11-05 14:13:10', 20, 63.0795433],
-    ['2021-11-12 20:40:30', 20, 75.71856922]
-  ].map(toPaidEntry('TLM') as any),
+  // TLM: [
+  //   ['2021-11-05 14:13:10', 20, 63.0795433],
+  //   ['2021-11-12 20:40:30', 20, 75.71856922]
+  // ].map(toPaidEntry('TLM') as any),
   DOT: [
     ['2021-11-13 17:24:03', 34.15457339, 0.75011746],
   ].map(toPaidEntry('DOT') as any),
