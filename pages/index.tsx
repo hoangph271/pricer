@@ -6,7 +6,6 @@ import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/
 
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
-import { useLongPress } from 'use-long-press'
 
 const getColor = (colored: boolean | string, usdAmount: number) => {
   if (typeof colored === 'string') return colored
@@ -175,8 +174,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 }
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [coinStats, setCoinStats] = useState(props.coinStats)
+  const [coinStats] = useState(props.coinStats)
   const [showRefresh, setShowRefresh] = useState(false)
   const { status } = useSession({
     required: true,
@@ -184,20 +182,6 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
       signIn()
     }
   })
-  const longpressBind = useLongPress(async () => {
-    if (isLoading) return
-
-    setIsLoading(true)
-
-    const coinStats = await fetchCoinStats(document.cookie)
-
-    if (!coinStats) {
-      return alert('fetchCoinStats fails')
-    }
-
-    setCoinStats(coinStats)
-    setIsLoading(false)
-  }, {})
 
   useEffect(() => {
     if (!showRefresh) return
@@ -212,8 +196,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
   if (status !== 'authenticated') return null
 
   return (
-    <div className={`home ${isLoading ? 'is-loading' : ''}`}
-      {...longpressBind}
+    <div className={'home'}
     >
         <Head>
           <title>{'#Pricer'}</title>
