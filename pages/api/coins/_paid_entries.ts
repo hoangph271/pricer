@@ -32,6 +32,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   ].map((toPaidEntry('ADA') as any)),
   ETH: [
     ['2021-11-16 17:01:50', 18.999, 0.00449550],
+    ['2021-11-22 10:35:01', 99.63, 0.0243]
   ].map(toPaidEntry('ETH') as any),
   // LBC: [
   // ].map(toPaidEntry('LBC') as any),
