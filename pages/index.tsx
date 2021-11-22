@@ -48,7 +48,7 @@ const Entry: FC<{ entry: PaidEntry }> = props => {
   const { entry: { amount, amountUsd, date } } = props
   const [showAmount, setShowAmount] = useState(false)
 
-  const usdPrice = formatMoney(amountUsd / amount, 2)
+  const usdPrice = formatMoney(amountUsd / amount)
 
   return (
     <li style={{ display: 'flex', gap: '0', columnGap: '1rem', flexWrap: 'wrap' }}>
