@@ -45,6 +45,6 @@ export const formatDate = (date: string) => {
 
   return [
     _date.getDate().toString().padStart(2, '0'),
-    _date.getMonth().toString().padStart(2, '0')
+    (_date.getMonth() + 1).toString().padStart(2, '0')
   ].join('/')
 }
