@@ -34,22 +34,12 @@ export const paidEntries: Record<string, PaidEntry[]> = {
     ['2021-11-16 17:01:50', 18.999, 0.00449550],
     ['2021-11-22 10:35:01', 99.63, 0.0243]
   ].map(toPaidEntry('ETH') as any),
-  // LBC: [
-  // ].map(toPaidEntry('LBC') as any),
-  // BAT: [
-  // ].map(toPaidEntry('BAT') as any),
   BETA: [
     ['2021-11-10 20:47:50', 21.19754, 13]
   ].map(toPaidEntry('BETA') as any),
-  // TLM: [
-  //   ['2021-11-05 14:13:10', 20, 63.0795433],
-  //   ['2021-11-12 20:40:30', 20, 75.71856922]
-  // ].map(toPaidEntry('TLM') as any),
   DOT: [
     ['2021-11-13 17:24:03', 34.15457339, 0.75011746],
   ].map(toPaidEntry('DOT') as any),
-  // SHIB: [
-  // ].map(toPaidEntry('SHIB') as any),
   BTC: [
     ['2021-11-21 05:16:51', 42.316, 0.00071],
     ['2021-11-23 02:33:37', 33.04, 0.00059],
