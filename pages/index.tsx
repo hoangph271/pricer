@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
+import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
 import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
 
@@ -87,11 +88,15 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
-  const { prices, paids, usdPrice } = props.coinStats
+  const { coinStats } = props
+  const searchParams = new URLSearchParams(location.search)
+
+  const { prices, paids, usdPrice } = coinStats
   const coinNames = Object.keys(prices)
+  const displayCoinName = searchParams.get('coinName') ?? coinNames[0]
 
   const [earnInUsd, setEarnInUsd] = useState(false)
-  const [displayCoinName, setDisplayCoinName] = useState(coinNames[0])
+  // const [displayCoinName, setDisplayCoinName] = useState()
 
   const coinEntries = paids[displayCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
@@ -117,14 +122,17 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       <div className="col-flex-mini-gap">
         <div>
           {coinNames.map(coinName => (
-            <button
+            <Link
+              href={`/?coinName=${coinName}`}
               key={coinName}
-              style={{ margin: '0.4rem' }}
-              onClick={() => setDisplayCoinName(coinName)}
-              className={`nes-btn is-${coinName === displayCoinName ? 'success' : ''}`}
             >
-              {coinName}
-            </button>
+              <button
+                style={{ margin: '0.4rem' }}
+                className={`nes-btn is-${coinName === displayCoinName ? 'success' : ''}`}
+              >
+                {coinName}
+              </button>
+            </Link>
           ))}
         </div>
       </div>
