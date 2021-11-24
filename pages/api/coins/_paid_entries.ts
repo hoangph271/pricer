@@ -51,7 +51,8 @@ export const paidEntries: Record<string, PaidEntry[]> = {
     // ['2021-11-21 23:02:50', 21.2, 53]
   ].map(toPaidEntry('TLM') as any),
   MINA: [
-    ['2021-11-23 16:33:56', 54.75840000, 12.4]
+    ['2021-11-23 16:33:56', 54.75840000, 12.4],
+    ['2021-11-24 12:30:47', 22.015, 4],
   ].map(toPaidEntry('MINA') as any),
 }
 
