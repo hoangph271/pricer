@@ -87,16 +87,29 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   </div>
   )
 }
+
+const queryCoinNameOrDefault = (paids: Record<string, PaidEntry[]>, defaultCoinName: string) => {
+  const searchParams = new URLSearchParams(location.search)
+  const coinName = searchParams.get('coinName')
+
+  if (coinName !== null) {
+    if (paids[coinName]) {
+      return coinName
+    }
+  }
+
+  return defaultCoinName
+}
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
-  const searchParams = new URLSearchParams(location.search)
 
   const { prices, paids, usdPrice } = coinStats
   const coinNames = Object.keys(prices)
-  const displayCoinName = searchParams.get('coinName') ?? coinNames[0]
+
+  // ! FIXME: Maybe redirect...?
+  const displayCoinName = queryCoinNameOrDefault(paids, coinNames[0])
 
   const [earnInUsd, setEarnInUsd] = useState(false)
-  // const [displayCoinName, setDisplayCoinName] = useState()
 
   const coinEntries = paids[displayCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
