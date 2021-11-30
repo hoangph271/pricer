@@ -53,6 +53,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   MINA: [
     ['2021-11-26 17:50:00', 79.4288, 17.6],
   ].map(toPaidEntry('MINA') as any),
+  BAT: [
+    ['2021-11-29 11:28:03', 19.68000000, 12]
+  ].map(toPaidEntry('BAT') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
