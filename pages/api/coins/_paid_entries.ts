@@ -39,6 +39,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   ].map(toPaidEntry('BETA') as any),
   DOT: [
     ['2021-11-13 17:24:03', 34.15457339, 0.75011746],
+    ['2021-11-30 21:20:23', 39.31, 1],
   ].map(toPaidEntry('DOT') as any),
   BTC: [
     ['2021-11-21 05:16:51', 42.316, 0.00071],
