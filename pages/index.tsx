@@ -3,69 +3,15 @@ import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
-import { formatUsd, formatVnd, formatMoney, formatDate, str2Date } from '../lib/formatters'
+
+import { formatMoney, str2Date } from '../lib/formatters'
 
 import type { CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
+import { API_ROOT } from '../lib/constants'
 
-const getColor = (colored: boolean | string, usdAmount: number) => {
-  if (typeof colored === 'string') return colored
-
-  if (colored) {
-    return usdAmount < 0 ? 'red' : 'green'
-  }
-
-  return ''
-}
-const MoneyBadge: FC<{ usdAmount: number, usdPrice: number, title?: string, colored?: boolean | string }> = (props) => {
-  const { usdAmount, usdPrice, title, colored = true } = props
-  const [showInUsd, setShowInUsd] = useState(true)
-
-  const money = showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)
-
-  return (
-    <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
-      <span style={{ color: getColor(colored, usdAmount) }}>
-        {title ? (
-          <span>{`${title}: ${money}`}</span>
-        ) : (
-          <span>{money}</span>
-        )}
-      </span>
-    </span>
-  )
-}
-const PercentageBadge: FC<{ percentage: number }> = props => {
-  const { percentage } = props
-
-  return (
-    <span style={{ color: percentage < 100 ? 'red' : 'green' }}>
-      {percentage.toFixed(2)}%
-    </span>
-  )
-}
-
-const Entry: FC<{ entry: PaidEntry }> = props => {
-  const { entry: { amount, amountUsd, date } } = props
-  const [showAmount, setShowAmount] = useState(false)
-
-  const usdPrice = formatMoney(amountUsd / amount)
-
-  return (
-    <li style={{ display: 'flex', gap: '0', columnGap: '1rem', flexWrap: 'wrap' }}>
-      <span>{formatDate(date)}</span>
-      {showAmount ? (
-        <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${formatUsd(amountUsd)}`}
-        </span>
-      ) : (
-        <span onClick={() => setShowAmount(prev => !prev)}>
-          {`${formatMoney(amount)}@${usdPrice}`}
-        </span>
-      )}
-    </li>
-  )
-}
+import { MoneyBadge, PercentageBadge, EntryLine } from '../components'
+import { queryCoinNameOrDefault } from '../lib/utils'
 
 const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   const { totalHave, totalSpent, usdPrice } = props.coinStats
@@ -88,18 +34,6 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 
-const queryCoinNameOrDefault = (paids: Record<string, PaidEntry[]>, defaultCoinName: string) => {
-  const searchParams = new URLSearchParams(location.search)
-  const coinName = searchParams.get('coinName')
-
-  if (coinName !== null) {
-    if (paids[coinName]) {
-      return coinName
-    }
-  }
-
-  return defaultCoinName
-}
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
 
@@ -185,7 +119,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           </h4>
           <ul>
             {coinEntriesByYear.get(year)!.map((entry, i) => (
-              <Entry entry={entry} key={i} />
+              <EntryLine entry={entry} key={i} />
             ))}
           </ul>
         </div>
@@ -229,8 +163,6 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
 }
 
 export default Home
-
-const API_ROOT = process.env.API_ROOT ?? 'http://localhost:3000/api'
 
 const fetchCoinStats = async (cookie: string) => {
   const res = await fetch(`${API_ROOT}/coins/`, {
