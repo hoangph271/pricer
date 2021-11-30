@@ -4,3 +4,4 @@ export const HARD_CODED_ACCOUNT = {
 }
 
 export const SECRET = Object.values(HARD_CODED_ACCOUNT).join('')
+export const API_ROOT = process.env.API_ROOT ?? 'http://localhost:3000/api'
