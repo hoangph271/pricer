@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
+import { Button, List, Typography, ListItem, ListItemText } from '@mui/material'
 
 import { formatMoney, str2Date } from '../lib/formatters'
 
@@ -73,12 +74,13 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               href={`/?coinName=${coinName}`}
               key={coinName}
             >
-              <button
-                style={{ margin: '0.4rem' }}
-                className={`nes-btn is-${coinName === displayCoinName ? 'success' : ''}`}
+              <Button
+                color="success"
+                variant={coinName === displayCoinName ? 'contained' : 'outlined'}
+                style={{ margin: '0.3rem' }}
               >
                 {coinName}
-              </button>
+              </Button>
             </Link>
           ))}
         </div>
@@ -114,14 +116,22 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       </div>
       {Array.from(coinEntriesByYear.keys()).map(year => (
         <div key={year}>
-          <h4 style={{ fontWeight: 'normal' }}>
+          <Typography variant="h5" component="h5">
+            {`- ${year} -`}
+          </Typography>
+          {/* <h4 style={{ fontWeight: 'normal' }}>
           {`- ${year} -`}
-          </h4>
-          <ul>
+          </h4> */}
+          <List>
             {coinEntriesByYear.get(year)!.map((entry, i) => (
               <EntryLine entry={entry} key={i} />
             ))}
-          </ul>
+          </List>
+          {/* <ul>
+            {coinEntriesByYear.get(year)!.map((entry, i) => (
+              <EntryLine entry={entry} key={i} />
+            ))}
+          </ul> */}
         </div>
       ))}
     </div>
@@ -130,23 +140,12 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
   const [coinStats] = useState(props.coinStats)
-  const [showRefresh, setShowRefresh] = useState(false)
   const { status } = useSession({
     required: true,
     onUnauthenticated () {
       signIn()
     }
   })
-
-  useEffect(() => {
-    if (!showRefresh) return
-
-    const timer = setTimeout(() => {
-      setShowRefresh(false)
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [showRefresh])
 
   if (status !== 'authenticated') return null
 
