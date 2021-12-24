@@ -51,6 +51,8 @@ export const paidEntries: Record<string, PaidEntry[]> = {
     ['2021-11-19 22:40:20', 25.9 + 22, 505365.85 + 427267.43],
   ].map(toPaidEntry('SHIB') as any),
   TLM: [
+    ['2021-12-22 11:04:39', 29.8215, 135],
+    ['2021-12-02 02:05:49', 15.99, 39],
   ].map(toPaidEntry('TLM') as any),
   MINA: [
     ['2021-11-26 17:50:00', 79.4288, 17.6],
@@ -58,6 +60,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   BAT: [
     ['2021-11-29 11:28:03', 19.68000000, 12]
   ].map(toPaidEntry('BAT') as any),
+  GALA: [
+    ['2021-12-16 10:03:06', 49.942, 100]
+  ].map(toPaidEntry('GALA') as any)
 }
 
 Object.getOwnPropertyNames(paidEntries)
