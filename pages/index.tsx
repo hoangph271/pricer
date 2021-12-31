@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import Router from 'next/router'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
@@ -34,16 +35,27 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 
+const notMiscNames = ['ETH', 'BTC', 'FIL']
+
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
+  const [showMiscs, setShowMiscs] = useState(false)
+  const [earnInUsd, setEarnInUsd] = useState(false)
 
   const { prices, paids, usdPrice } = coinStats
   const coinNames = Object.keys(prices)
+    .filter(coinName => {
+      if (showMiscs) return true
 
-  // ! FIXME: Maybe redirect...?
-  const displayCoinName = queryCoinNameOrDefault(paids, coinNames[0])
+      return notMiscNames.includes(coinName)
+    })
 
-  const [earnInUsd, setEarnInUsd] = useState(false)
+  const displayCoinName = queryCoinNameOrDefault(coinNames)
+
+  if (displayCoinName === null) {
+    Router.push(`/?coinName=${coinNames[0]}`)
+    return null
+  }
 
   const coinEntries = paids[displayCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
@@ -68,6 +80,13 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
     <div className="col-flex-mini-gap">
       <div className="col-flex-mini-gap">
         <div>
+          <button
+              style={{ margin: '0.4rem' }}
+              className={`nes-btn is-${showMiscs ? 'warning' : 'primary'}`}
+              onClick={() => setShowMiscs(prev => !prev)}
+            >
+              {showMiscs ? 'Hide Miscs' : 'Show Miscs'}
+            </button>
           {coinNames.map(coinName => (
             <Link
               href={`/?coinName=${coinName}`}

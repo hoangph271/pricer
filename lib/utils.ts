@@ -1,5 +1,3 @@
-import { PaidEntry } from '../global'
-
 export const getColor = (colored: boolean | string, usdAmount: number) => {
   if (typeof colored === 'string') return colored
 
@@ -10,15 +8,11 @@ export const getColor = (colored: boolean | string, usdAmount: number) => {
   return ''
 }
 
-export const queryCoinNameOrDefault = (paids: Record<string, PaidEntry[]>, defaultCoinName: string) => {
+export const queryCoinNameOrDefault = (coinNames: string[]) => {
   const searchParams = new URLSearchParams(location.search)
-  const coinName = searchParams.get('coinName')
+  const coinName = searchParams.get('coinName') ?? ''
 
-  if (coinName !== null) {
-    if (paids[coinName]) {
-      return coinName
-    }
-  }
-
-  return defaultCoinName
+  return coinNames.includes(coinName)
+    ? coinName
+    : null
 }
