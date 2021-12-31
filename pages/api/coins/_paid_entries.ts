@@ -76,6 +76,10 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   AXS: [
     ['2021-12-30 19:05:21', 46.55, 0.49]
   ].map(toPaidEntry('AXS') as any),
+  CEEK: [
+    ['2021-11-17 11:24:42', 15.68, 23.112154895061089],
+    ['2021-11-18 12:22:14', 18.53, 27.31632210060497],
+  ].map(toPaidEntry('CEEK') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
