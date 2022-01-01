@@ -43,23 +43,25 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const [earnInUsd, setEarnInUsd] = useState(false)
 
   const { prices, paids, usdPrice } = coinStats
-  const coinNames = Object.keys(prices)
+  const allCoinNames = Object.keys(prices)
+  const queryCoinName = queryCoinNameOrDefault(allCoinNames)
+
+  const filteredCoinNames = allCoinNames
     .filter(coinName => {
       if (showMiscs) return true
+      if (coinName === queryCoinName) return true
 
       return notMiscNames.includes(coinName)
     })
 
-  const displayCoinName = queryCoinNameOrDefault(coinNames)
-
-  if (displayCoinName === null) {
-    Router.push(`/?coinName=${coinNames[0]}`)
+  if (queryCoinName === null) {
+    Router.push(`/?coinName=${filteredCoinNames[0]}`)
     return null
   }
 
-  const coinEntries = paids[displayCoinName]
+  const coinEntries = paids[queryCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
-  const coinPrice = props.coinStats.prices[displayCoinName] as number
+  const coinPrice = props.coinStats.prices[queryCoinName] as number
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
   const coinEarnRatio = coinSpent > 0
     ? (coinPrice * totalCoins) / coinSpent
@@ -87,14 +89,14 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             >
               {showMiscs ? 'Hide Miscs' : 'Show Miscs'}
             </button>
-          {coinNames.map(coinName => (
+          {filteredCoinNames.map(coinName => (
             <Link
               href={`/?coinName=${coinName}`}
               key={coinName}
             >
               <button
                 style={{ margin: '0.4rem' }}
-                className={`nes-btn is-${coinName === displayCoinName ? 'success' : ''}`}
+                className={`nes-btn is-${coinName === queryCoinName ? 'success' : ''}`}
               >
                 {coinName}
               </button>
