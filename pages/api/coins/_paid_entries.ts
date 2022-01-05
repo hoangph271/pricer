@@ -50,6 +50,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   BTC: [
     ['2021-11-21 05:16:51', 42.316, 0.00071],
     ['2021-11-23 02:33:37', 33.04, 0.00059],
+    ['2022-01-04 22:51:14', 24.51380880, 0.00052],
   ].map(toPaidEntry('BTC') as any),
   SHIB: [
     ['2021-11-19 22:40:20', 25.9 + 22, 505365.85 + 427267.43],
@@ -86,6 +87,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   ACE: [
     ['2021-11-30 06:02:28', 20.40955709, 157.154062],
   ].map(toPaidEntry('ACE') as any),
+  LIT: [
+    ['2022-01-04 19:21:43', 25.128, 8],
+  ].map(toPaidEntry('LIT') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
