@@ -15,7 +15,7 @@ export default NextAuth({
       },
       async authorize (credentials) {
         const isAuthed = credentials.username === HARD_CODED_ACCOUNT.username &&
-         credentials.password === HARD_CODED_ACCOUNT.password
+          credentials.password === HARD_CODED_ACCOUNT.password
 
         return isAuthed ? { username: '@Me' } : null
       }
