@@ -71,6 +71,7 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
     res.status(200).json(resBody)
   } catch (error) {
     console.error(error)
+    res.status(500).end('Internal Server Error')
   }
 }
 
