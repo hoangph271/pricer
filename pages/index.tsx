@@ -35,7 +35,7 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   )
 }
 
-const notMiscNames = ['ETH', 'BTC', 'FIL']
+const notMiscNames = ['ETH', 'BTC', 'FIL', 'SOL']
 
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
