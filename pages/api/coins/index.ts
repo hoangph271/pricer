@@ -45,7 +45,7 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
     ] = await Promise.all([
       getPrices(...cryptoSymbols),
       // ! FIXME: Get USD price somewhere else
-      [[22_710]]
+      [[22_975]]
     ])
 
     const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
