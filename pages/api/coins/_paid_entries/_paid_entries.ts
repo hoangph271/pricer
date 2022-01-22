@@ -1,16 +1,22 @@
 import { PaidEntry } from '../../../../global'
+
+// TODO: Don't use this...! :"<<
+import { toPaidEntry } from './_paid_entries.utils'
+
 import { FIL } from './_paid_entries.fil.data'
 import { ADA } from './_paid_entries.ada.data'
 import { ETH } from './_paid_entries.eth.data'
-import { BETA } from './_paid_entries.beta'
-// TODO: Don't use this...! :"<<
-import { toPaidEntry } from './_paid_entries.utils'
+import { BETA } from './_paid_entries.beta.data'
+import { DOT } from './_paid_entries.dot.data'
+import { BTC } from './_paid_entries.btc.data'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
   FIL,
   ADA,
   ETH,
   BETA,
+  DOT,
+  BTC,
   SHIB: [
     ['2021-11-19 22:40:20', 25.9 + 22, 505365.85 + 427267.43],
   ].map(toPaidEntry('SHIB') as any),
