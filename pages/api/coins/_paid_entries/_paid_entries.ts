@@ -1,6 +1,5 @@
 import { PaidEntry } from '../../../../global'
 
-// TODO: Don't use this...! :"<<
 import { toPaidEntry } from './_paid_entries.utils'
 
 import { FIL } from './_paid_entries.fil.data'
