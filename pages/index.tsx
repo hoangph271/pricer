@@ -34,6 +34,32 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   </div>
   )
 }
+const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) => {
+  const { year, entries } = props
+  const isThisYear = year === new Date().getFullYear()
+  const [isOpen, setIsOpen] = useState(isThisYear)
+  const totalCoins = entries.reduce((prev, val) => prev + val.amount, 0)
+  const totalSpents = entries.reduce((prev, val) => prev + val.amountUsd, 0)
+  const averagePrice = totalSpents / totalCoins
+
+  return (
+    <div key={year}>
+      <h4
+        style={{ fontWeight: 'normal' }}
+        onClick={() => setIsOpen(prev => !prev)}
+      >
+        {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 8)}] -`}
+      </h4>
+      {isOpen && (
+        <ul>
+          {entries.map((entry, i) => (
+            <EntryLine entry={entry} key={i} />
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 const notMiscNames = ['ETH', 'BTC', 'FIL', 'SOL']
 
@@ -134,16 +160,11 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         </div>
       </div>
       {Array.from(coinEntriesByYear.keys()).map(year => (
-        <div key={year}>
-          <h4 style={{ fontWeight: 'normal' }}>
-          {`- ${year} -`}
-          </h4>
-          <ul>
-            {coinEntriesByYear.get(year)!.map((entry, i) => (
-              <EntryLine entry={entry} key={i} />
-            ))}
-          </ul>
-        </div>
+        <CoinEntriesByYear
+          key={year}
+          year={year}
+          entries={coinEntriesByYear.get(year) as PaidEntry[]}
+        />
       ))}
     </div>
   )

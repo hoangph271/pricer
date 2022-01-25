@@ -17,7 +17,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   DOT,
   BTC,
   SHIB: [
-    ['2021-11-19 22:40:20', 25.9 + 22, 505365.85 + 427267.43],
+    ['2021-11-19 22:40:20', 25.9 + 22, 505_365.85 + 427_267.43],
   ].map(toPaidEntry('SHIB') as any),
   TLM: [
     ['2021-12-22 11:04:39', 29.8215, 135],
