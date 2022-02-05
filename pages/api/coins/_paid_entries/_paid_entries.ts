@@ -55,9 +55,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   LIT: [
     ['2022-01-04 19:21:43', 25.128, 8],
   ].map(toPaidEntry('LIT') as any),
-  // GLMR: [
-  //   ['2022-01-13 13:05:43', 26.2722, 3],
-  // ].map(toPaidEntry('GLMR') as any),
+  GLMR: [
+    ['2022-01-13 13:05:43', 27.12045, 3.5],
+  ].map(toPaidEntry('GLMR') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
