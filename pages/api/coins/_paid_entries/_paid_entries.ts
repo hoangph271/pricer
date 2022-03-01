@@ -8,6 +8,7 @@ import { ETH } from './_paid_entries.eth.data'
 import { BETA } from './_paid_entries.beta.data'
 import { DOT } from './_paid_entries.dot.data'
 import { BTC } from './_paid_entries.btc.data'
+import { SOL } from './_paid_entries.sol.data'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
   FIL,
@@ -16,6 +17,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   BETA,
   DOT,
   BTC,
+  SOL,
   SHIB: [
     ['2021-11-19 22:40:20', 25.9 + 22, 505_365.85 + 427_267.43],
   ].map(toPaidEntry('SHIB') as any),
@@ -32,10 +34,6 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   GALA: [
     ['2021-12-16 10:03:06', 49.942, 100]
   ].map(toPaidEntry('GALA') as any),
-  SOL: [
-    ['2021-12-29 13:14:36', 43.75, 0.25],
-    ['2022-01-20 18:16:09', 49.608, 0.36],
-  ].map(toPaidEntry('SOL') as any),
   CHZ: [
     ['2021-12-26 15:27:44', 65.8275, 201],
   ].map(toPaidEntry('CHZ') as any),
