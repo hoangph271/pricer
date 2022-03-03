@@ -56,6 +56,9 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   GLMR: [
     ['2022-01-13 13:05:43', 27.12045, 3.5],
   ].map(toPaidEntry('GLMR') as any),
+  BMI: [
+    ['2022-03-01 17:03:28', 25.592, 225],
+  ].map(toPaidEntry('BMI') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
