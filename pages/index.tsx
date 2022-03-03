@@ -34,6 +34,7 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   </div>
   )
 }
+
 const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) => {
   const { year, entries } = props
   const isThisYear = year === new Date().getFullYear()
@@ -48,7 +49,7 @@ const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) =>
         style={{ fontWeight: 'normal' }}
         onClick={() => setIsOpen(prev => !prev)}
       >
-        {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 8)}] -`}
+        {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 4)}] -`}
       </h4>
       {isOpen && (
         <ul>
@@ -109,12 +110,12 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       <div className="col-flex-mini-gap">
         <div>
           <button
-              style={{ margin: '0.4rem' }}
-              className={`nes-btn is-${showMiscs ? 'warning' : 'primary'}`}
-              onClick={() => setShowMiscs(prev => !prev)}
-            >
-              {showMiscs ? 'Hide Miscs' : 'Show Miscs'}
-            </button>
+            style={{ margin: '0.4rem' }}
+            className={`nes-btn is-${showMiscs ? 'warning' : 'primary'}`}
+            onClick={() => setShowMiscs(prev => !prev)}
+          >
+            {showMiscs ? 'Hide Miscs' : 'Show Miscs'}
+          </button>
           {filteredCoinNames.map(coinName => (
             <Link
               href={`/?coinName=${coinName}`}
