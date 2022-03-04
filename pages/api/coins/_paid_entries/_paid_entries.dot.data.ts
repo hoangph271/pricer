@@ -7,6 +7,7 @@ const spentDotEntries: CoinSpentEntry[] = [
   ['2021-11-30 22:55:18', 19.9969, 0.53],
   ['2022-01-07 01:08:15', 26, 1],
   ['2022-03-02 21:32:46', 37, 2],
+  ['2022-03-04 13:52:11', 19.89, 1.17],
 ]
 
 export const DOT: PaidEntry[] = spentDotEntries.map(toPaidEntry('DOT'))
