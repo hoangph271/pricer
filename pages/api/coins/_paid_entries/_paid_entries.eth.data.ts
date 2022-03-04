@@ -14,6 +14,7 @@ const spentEthEntries: CoinSpentEntry[] = [
   ['2022-02-05 13:54:29', 24.705042, 0.0082],
   ['2022-02-13 13:03:55', 29, 0.01],
   ['2022-03-01 11:21:59', 29, 0.01],
+  ['2022-03-04 13:50:35', 27, 0.01]
 ]
 
 export const ETH: PaidEntry[] = spentEthEntries.map(toPaidEntry('ETH'))
