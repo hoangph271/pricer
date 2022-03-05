@@ -9,6 +9,7 @@ const spentAdaEntries: CoinSpentEntry[] = [
   ['2021-10-25 21:24:56', 25, 11.64534792],
   ['2021-10-28 16:41:03', 25, 12.41446434],
   ['2022-01-07 11:19:15', 18.96, 15.8],
+  ['2022-03-04 13:51:48', 17, 20]
 ]
 
 export const ADA: PaidEntry[] = spentAdaEntries.map(toPaidEntry('ADA'))
