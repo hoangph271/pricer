@@ -6,15 +6,25 @@ import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { paidEntries } from './_paid_entries/_paid_entries'
 
-const getPrices = async (...names: string[]): Promise<number[]> => {
+const getPrices = async (...names: string[]): Promise<{
+  prices: number[],
+  apiResponse: ApiResponse
+}> => {
   return await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
     headers: {
       'X-CMC_PRO_API_KEY': 'deb827df-a1a6-4ceb-940c-3114e9adca4d'
     }
   }).then(async res => {
-    const { data } = await res.json() as any
+    const { data: apiResponse } = await res.json() as { data: ApiResponse }
 
-    return Object.values(data).map((val: any) => val.quote.USD.price as number)
+    console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
+
+    return {
+      apiResponse,
+      prices: Object
+        .values(apiResponse)
+        .map((val: any) => val.quote.USD.price as number)
+    }
   })
 }
 
@@ -23,8 +33,54 @@ export type CoinStats = {
   usdPrice: number
   totalHave: number
   totalSpent: number
-  paids: Record<string, PaidEntry[]>
+  paids: Record<string, PaidEntry[]>,
+  apiResponse: ApiResponse
 }
+
+export type CoinApiRecord = {
+  id: number
+  name: string
+  symbol: string
+  slug: string
+  num_market_pairs: number
+  date_added: Date
+  tags: string[]
+  max_supply: number
+  circulating_supply: number
+  total_supply: number
+  platform: {
+    id: number
+    name: string
+    symbol: string
+    slug: string
+    token_address: string
+  }
+  is_active: number
+  cmc_rank: number
+  is_fiat: number
+  self_reported_circulating_supply: number
+  self_reported_market_cap: number
+  last_updated: Date
+  quote: {
+    USD: {
+      price: number
+      volume_24h: number
+      volume_change_24h: number
+      percent_change_1h: number
+      percent_change_24h: number
+      percent_change_7d: number
+      percent_change_30d: number
+      percent_change_60d: number
+      percent_change_90d: number
+      market_cap: number
+      market_cap_dominance: number
+      fully_diluted_market_cap: number
+      last_updated: Date
+    }
+  }
+}
+export type ApiResponse = Record<string, CoinApiRecord>
+
 const handler: NextApiHandler<CoinStats> = async (req, res) => {
   try {
     await runMiddleware(req, res, cors)
@@ -38,14 +94,15 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
     const allEntries = Object.values(paidEntries).flat(1)
     const totalSpent = allEntries.reduce((sum, entry) => entry.amountUsd + sum, 0)
     const cryptoSymbols = Object.getOwnPropertyNames(paidEntries).sort()
+    const { prices: coinPrices, apiResponse } = await getPrices(...cryptoSymbols)
 
     const [
       cryptoPrices,
       [[usdPrice]]
     ] = await Promise.all([
-      getPrices(...cryptoSymbols),
+      coinPrices,
       // ! FIXME: Get USD price somewhere else
-      [[22_975]]
+      [[22_840]]
     ])
 
     const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
@@ -65,7 +122,8 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
       totalHave,
       totalSpent,
       paids: paidEntries,
-      usdPrice
+      usdPrice,
+      apiResponse
     }
 
     res.status(200).json(resBody)

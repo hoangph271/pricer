@@ -7,7 +7,7 @@ import { signIn, useSession } from 'next-auth/react'
 
 import { formatMoney, str2Date } from '../lib/formatters'
 
-import type { CoinStats } from './api/coins'
+import type { CoinApiRecord, CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 import { API_ROOT } from '../lib/constants'
 
@@ -31,7 +31,7 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
         <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} />
         <span>{']'}</span>
       </span>
-  </div>
+    </div>
   )
 }
 
@@ -64,12 +64,47 @@ const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) =>
 
 const notMiscNames = ['ETH', 'BTC', 'FIL', 'SOL']
 
+const CoinDetails: FC<{
+  totalCoins: number,
+  coinSpent: number,
+  coinRecord: CoinApiRecord,
+}> = (props) => {
+  const { coinSpent, totalCoins, coinRecord } = props
+  const [showMore, setShowMore] = useState(false)
+
+  const usdQuote = coinRecord.quote.USD
+
+  return showMore ? (
+    <div
+      className="nes-container is-centered"
+    >
+      <div onClick={() => setShowMore(false)}>
+        {`•DCA@${formatMoney(coinSpent / totalCoins)}•`}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        {[
+          usdQuote.percent_change_1h,
+          usdQuote.percent_change_24h,
+          usdQuote.percent_change_7d,
+          usdQuote.percent_change_60d,
+        ]
+          .map((percentage, i) => <PercentageBadge key={i} percentage={percentage} compareTo={0} />)}
+      </div>
+    </div>
+  ) : (
+    <div onClick={() => setShowMore(true)}>
+      {`•DCA@${formatMoney(coinSpent / totalCoins)}•`}
+    </div>
+  )
+}
+
+
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
   const [showMiscs, setShowMiscs] = useState(false)
   const [earnInUsd, setEarnInUsd] = useState(false)
 
-  const { prices, paids, usdPrice } = coinStats
+  const { prices, paids, usdPrice, apiResponse } = coinStats
   const allCoinNames = Object.keys(prices)
   const queryCoinName = queryCoinNameOrDefault(allCoinNames)
 
@@ -134,7 +169,11 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       <div style={{ margin: '0' }}>
         <div>
           <div>{`${totalCoins.toFixed(totalCoins > 1000 ? 0 : 4)}@${formatMoney(coinPrice)}`}</div>
-          <div>{`•DCA@${formatMoney(coinSpent / totalCoins)}•`}</div>
+          <CoinDetails
+            coinRecord={apiResponse[queryCoinName]}
+            totalCoins={totalCoins}
+            coinSpent={coinSpent}
+          />
         </div>
         <div>
           <span>{'['}</span>
@@ -197,11 +236,11 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
   return (
     <div className={'home'}
     >
-        <Head>
-          <title>{'#Pricer'}</title>
-        </Head>
-        <AssetSummary coinStats={coinStats} />
-        <CoinPaidSummary coinStats={coinStats} />
+      <Head>
+        <title>{'#Pricer'}</title>
+      </Head>
+      <AssetSummary coinStats={coinStats} />
+      <CoinPaidSummary coinStats={coinStats} />
     </div>
   )
 }
