@@ -98,7 +98,6 @@ const CoinDetails: FC<{
   )
 }
 
-
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
   const [showMiscs, setShowMiscs] = useState(false)

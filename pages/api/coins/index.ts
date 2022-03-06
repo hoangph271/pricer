@@ -6,28 +6,6 @@ import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { paidEntries } from './_paid_entries/_paid_entries'
 
-const getPrices = async (...names: string[]): Promise<{
-  prices: number[],
-  apiResponse: ApiResponse
-}> => {
-  return await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
-    headers: {
-      'X-CMC_PRO_API_KEY': 'deb827df-a1a6-4ceb-940c-3114e9adca4d'
-    }
-  }).then(async res => {
-    const { data: apiResponse } = await res.json() as { data: ApiResponse }
-
-    console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
-
-    return {
-      apiResponse,
-      prices: Object
-        .values(apiResponse)
-        .map((val: any) => val.quote.USD.price as number)
-    }
-  })
-}
-
 export type CoinStats = {
   prices: Record<string, number>
   usdPrice: number
@@ -81,6 +59,28 @@ export type CoinApiRecord = {
 }
 export type ApiResponse = Record<string, CoinApiRecord>
 
+/* eslint camelcase: "off", no-use-before-define: "off", */
+const getPrices = async (...names: string[]): Promise<{
+  prices: number[],
+  apiResponse: ApiResponse
+}> => {
+  return await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
+    headers: {
+      'X-CMC_PRO_API_KEY': 'deb827df-a1a6-4ceb-940c-3114e9adca4d'
+    }
+  }).then(async res => {
+    const { data: apiResponse } = await res.json() as { data: ApiResponse }
+
+    console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
+
+    return {
+      apiResponse,
+      prices: Object
+        .values(apiResponse)
+        .map((val: any) => val.quote.USD.price as number)
+    }
+  })
+}
 const handler: NextApiHandler<CoinStats> = async (req, res) => {
   try {
     await runMiddleware(req, res, cors)
