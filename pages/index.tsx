@@ -62,8 +62,6 @@ const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) =>
   )
 }
 
-const notMiscNames = ['ETH', 'BTC', 'FIL', 'SOL']
-
 const CoinDetails: FC<{
   totalCoins: number,
   coinSpent: number,
@@ -112,7 +110,9 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       if (showMiscs) return true
       if (coinName === queryCoinName) return true
 
-      return notMiscNames.includes(coinName)
+      const totalSpent = paids[coinName].reduce((prev, entry) => entry.amount + prev, 0)
+
+      return totalSpent >= 100
     })
 
   if (queryCoinName === null) {
