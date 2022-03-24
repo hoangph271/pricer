@@ -110,7 +110,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       if (showMiscs) return true
       if (coinName === queryCoinName) return true
 
-      const totalSpent = paids[coinName].reduce((prev, entry) => entry.amount + prev, 0)
+      const totalSpent = paids[coinName].reduce((prev, entry) => entry.amountUsd + prev, 0)
 
       return totalSpent >= 100
     })
