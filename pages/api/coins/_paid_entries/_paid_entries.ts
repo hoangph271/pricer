@@ -9,6 +9,7 @@ import { BETA } from './_paid_entries.beta.data'
 import { DOT } from './_paid_entries.dot.data'
 import { BTC } from './_paid_entries.btc.data'
 import { SOL } from './_paid_entries.sol.data'
+import { NEAR } from './_paid_entries.near.data'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
   FIL,
@@ -18,6 +19,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   DOT,
   BTC,
   SOL,
+  NEAR,
   SHIB: [
     ['2021-11-19 22:40:20', 25.9 + 22, 505_365.85 + 427_267.43],
   ].map(toPaidEntry('SHIB') as any),
