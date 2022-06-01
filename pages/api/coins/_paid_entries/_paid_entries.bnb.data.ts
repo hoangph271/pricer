@@ -6,4 +6,4 @@ const spentBnbEntries: CoinSpentEntry[] = [
   ['2022-05-29 11:00:00', 6, 0.01992]
 ]
 
-export const BTC: PaidEntry[] = spentBnbEntries.map(toPaidEntry('BNB'))
+export const BNB: PaidEntry[] = spentBnbEntries.map(toPaidEntry('BNB'))
