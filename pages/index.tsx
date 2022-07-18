@@ -86,7 +86,13 @@ const CoinDetails: FC<{
           usdQuote.percent_change_7d,
           usdQuote.percent_change_60d,
         ]
-          .map((percentage, i) => <PercentageBadge key={i} percentage={percentage} compareTo={0} />)}
+          .map((percentage, i) => (
+            <PercentageBadge
+              key={i}
+              percentage={percentage}
+              compareTo={0}
+            />
+          ))}
       </div>
     </div>
   ) : (
@@ -180,8 +186,9 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             {earnInUsd ? (
               <span>
                 <MoneyBadge
-                  usdAmount={(coinEarnRatio - 1) * coinSpent}
+                  usdAmount={coinEarnRatio * coinSpent}
                   usdPrice={usdPrice}
+                  compareTo={coinSpent}
                 />
               </span>
             ) : (
@@ -193,7 +200,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             <MoneyBadge
               usdPrice={usdPrice}
               usdAmount={coinSpent}
-              colored={coinEarnRatio < 1 ? 'red' : 'green'}
+              colored={false}
             />
           </span>
           <span>{']'}</span>
