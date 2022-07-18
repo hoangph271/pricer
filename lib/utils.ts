@@ -1,8 +1,8 @@
-export const getColor = (colored: boolean | string, usdAmount: number) => {
+export const getColor = (colored: boolean | string, usdAmount: number, compareTo = 0) => {
   if (typeof colored === 'string') return colored
 
   if (colored) {
-    return usdAmount < 0 ? 'red' : 'green'
+    return usdAmount < compareTo ? 'red' : 'green'
   }
 
   return ''
