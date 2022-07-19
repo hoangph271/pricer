@@ -12,6 +12,7 @@ const spentBtcEntries: CoinSpentEntry[] = [
   ['2022-05-01 05:03:20', 21.4241944, 0.00056],
   ['2022-05-19 15:53:36', 14.5, 0.0005],
   ['2022-05-29 11:00:00', 4, 0.00013],
+  ['2022-07-19 21:26:10', 21.5382001, 0.00097],
 ]
 
 export const BTC: PaidEntry[] = spentBtcEntries.map(toPaidEntry('BTC'))

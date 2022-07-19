@@ -13,6 +13,7 @@ import { NEAR } from './_paid_entries.near.data'
 import { USDT } from './_paid_entries.usdt.data'
 import { BNB } from './_paid_entries.bnb.data'
 import { UST } from './_paid_entries.ust.data'
+import { GLMR } from './_paid_entries.glmr.data'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
   FIL,
@@ -61,9 +62,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   LIT: [
     ['2022-01-04 19:21:43', 25.128, 8],
   ].map(toPaidEntry('LIT') as any),
-  GLMR: [
-    ['2022-01-13 13:05:43', 27.12045, 3.5],
-  ].map(toPaidEntry('GLMR') as any),
+  GLMR,
   BMI: [
     ['2022-03-01 17:03:28', 25.592, 225],
   ].map(toPaidEntry('BMI') as any),
