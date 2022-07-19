@@ -16,13 +16,14 @@ import { queryCoinNameOrDefault } from '../lib/utils'
 
 const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   const { totalHave, totalSpent, usdPrice } = props.coinStats
+  const totalHaveColor = totalHave < totalSpent ? 'red' : 'green'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <span>
-        <MoneyBadge usdAmount={totalHave - totalSpent} usdPrice={usdPrice} />
+        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} colored={totalHaveColor} />
         <span>{'/'}</span>
-        <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} />
+        <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} colored={false} />
       </span>
       <span className="total-have">
         <span>{'['}</span>
