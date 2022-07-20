@@ -14,5 +14,5 @@ export const queryCoinNameOrDefault = (coinNames: string[]) => {
 
   return coinNames.includes(coinName)
     ? coinName
-    : null
+    : coinNames[0]
 }
