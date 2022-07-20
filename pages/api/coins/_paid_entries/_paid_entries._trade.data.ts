@@ -3,9 +3,9 @@ import { PaidEntry } from '../../../../global'
 import { toPaidEntry } from './_paid_entries.utils'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
-  BMI: [
-    ['2022-03-01 17:03:28', 25.592, 225],
-  ].map(toPaidEntry('BMI') as any),
+  BUSD: [
+    ['2022-07-20 22:45:22', 50.12, 50.12],
+  ].map(toPaidEntry('BUSD') as any),
 }
 
 Object.getOwnPropertyNames(paidEntries)
