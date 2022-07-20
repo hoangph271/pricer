@@ -27,6 +27,7 @@ const spentFilEntries: CoinSpentEntry[] = [
   ['2022-01-25 13:11:22', 17.9, 1],
   ['2022-02-13 13:03:10', 20.28, 1],
   ['2022-03-01 11:23:11', 21, 1],
+  ['2022-07-20 10:14:21', 10.98, 1.83],
 ]
 
 export const FIL: PaidEntry[] = spentFilEntries.map(toPaidEntry('FIL'))
