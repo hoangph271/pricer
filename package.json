@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "next lint",
     "deploy": "yarn && yarn build && pm2 restart pricer",
     "deploy:latest": "git pull && yarn install --ignore-engines && yarn deploy"
