@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react'
 import HttpStatus from 'http-status'
 import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
-import { paidEntries } from './_paid_entries/_paid_entries'
+import { paidEntries } from './_paid_entries/_paid_entries._trade.data'
 
 export type CoinStats = {
   prices: Record<string, number>
