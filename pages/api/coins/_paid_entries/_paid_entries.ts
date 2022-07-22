@@ -12,7 +12,7 @@ import { SOL } from './_paid_entries.sol.data'
 import { NEAR } from './_paid_entries.near.data'
 import { USDT } from './_paid_entries.usdt.data'
 import { BNB } from './_paid_entries.bnb.data'
-import { UST } from './_paid_entries.ust.data'
+import { BUSD } from './_paid_entries.busd.data'
 import { GLMR } from './_paid_entries.glmr.data'
 
 export const paidEntries: Record<string, PaidEntry[]> = {
@@ -25,7 +25,7 @@ export const paidEntries: Record<string, PaidEntry[]> = {
   SOL,
   NEAR,
   USDT,
-  UST,
+  BUSD,
   BNB,
   SHIB: [
     ['2021-11-19 22:40:20', 25.9 + 22, 505_365.85 + 427_267.43],
