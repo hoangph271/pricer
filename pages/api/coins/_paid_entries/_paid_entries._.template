@@ -1,8 +1,0 @@
-import { PaidEntry } from '../../../../global'
-import { CoinSpentEntry } from './_paid_entries.types'
-import { toPaidEntry } from './_paid_entries.utils'
-
-const spent_Entries: CoinSpentEntry[] = [
-]
-
-export const _: PaidEntry[] = spent_Entries.map(toPaidEntry(''))
