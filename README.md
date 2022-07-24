@@ -14,3 +14,5 @@ type PaidEntry = {
   amount: number
 }
 ```
+
+- Run `yarn deploy:latest`
