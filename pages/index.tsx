@@ -30,15 +30,15 @@ const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
         <span>{'['}</span>
         <PercentageBadge percentage={(totalHave / totalSpent) * 100} />
         <span>{' - '}</span>
-        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} colored={balanceColor} />
+        <MoneyBadge usdAmount={netProfit} usdPrice={usdPrice} colored={balanceColor} />
         <span>{']'}</span>
       </span>
     </div>
   )
 }
 
-const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) => {
-  const { year, entries } = props
+const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[], coinPrice: number }> = (props) => {
+  const { year, entries, coinPrice } = props
   const isThisYear = year === new Date().getFullYear()
   const [isOpen, setIsOpen] = useState(isThisYear)
   const totalCoins = entries.reduce((prev, val) => prev + val.amount, 0)
@@ -56,7 +56,7 @@ const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[] }> = (props) =>
       {isOpen && (
         <ul>
           {entries.map((entry, i) => (
-            <EntryLine entry={entry} key={i} />
+            <EntryLine entry={entry} key={i} coinPrice={coinPrice} />
           ))}
         </ul>
       )}
@@ -130,7 +130,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
   const coinEntries = paids[queryCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
-  const coinPrice = props.coinStats.prices[queryCoinName] as number
+  const coinPrice = coinStats.prices[queryCoinName] as number
   const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
   const coinEarnRatio = coinSpent > 0
     ? (coinPrice * totalCoins) / coinSpent
@@ -208,13 +208,19 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           <span>{']'}</span>
         </div>
       </div>
-      {Array.from(coinEntriesByYear.keys()).map(year => (
-        <CoinEntriesByYear
-          key={year}
-          year={year}
-          entries={coinEntriesByYear.get(year) as PaidEntry[]}
-        />
-      ))}
+      {Array.from(coinEntriesByYear.keys()).map(year => {
+        const entries = coinEntriesByYear.get(year) as PaidEntry[]
+        const { name } = entries[0]
+
+        return (
+          <CoinEntriesByYear
+            key={year}
+            year={year}
+            entries={entries}
+            coinPrice={coinStats.prices[name]}
+          />
+        )
+      })}
     </div>
   )
 }

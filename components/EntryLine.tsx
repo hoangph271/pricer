@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import { PaidEntry } from '../global'
 import { formatMoney, formatDate, formatUsd } from '../lib/formatters'
 
-export const EntryLine: FC<{ entry: PaidEntry }> = props => {
+export const EntryLine: FC<{ entry: PaidEntry, coinPrice: number }> = props => {
   const { entry: { amount, amountUsd, date } } = props
   const [showAmount, setShowAmount] = useState(false)
 
