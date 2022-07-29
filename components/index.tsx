@@ -1,3 +1,5 @@
 export * from './MoneyBadge'
 export * from './PercentageBadge'
 export * from './EntryLine'
+export * from './AssetSummary'
+export * from './CoinEntriesByYear'

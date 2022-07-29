@@ -11,58 +11,8 @@ import type { CoinApiRecord, CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 import { API_ROOT } from '../lib/constants'
 
-import { MoneyBadge, PercentageBadge, EntryLine } from '../components'
+import { MoneyBadge, PercentageBadge, CoinEntriesByYear, AssetSummary } from '../components'
 import { queryCoinNameOrDefault } from '../lib/utils'
-
-const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
-  const { totalHave, totalSpent, usdPrice } = props.coinStats
-  const netProfit = totalHave - totalSpent
-  const balanceColor = netProfit < 0 ? 'red' : 'green'
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <span>
-        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} colored={balanceColor} />
-        <span>{'/'}</span>
-        <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} colored={false} />
-      </span>
-      <span className="total-have">
-        <span>{'['}</span>
-        <PercentageBadge percentage={(totalHave / totalSpent) * 100} />
-        <span>{' - '}</span>
-        <MoneyBadge usdAmount={netProfit} usdPrice={usdPrice} colored={balanceColor} />
-        <span>{']'}</span>
-      </span>
-    </div>
-  )
-}
-
-const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[], coinPrice: number }> = (props) => {
-  const { year, entries, coinPrice } = props
-  const isThisYear = year === new Date().getFullYear()
-  const [isOpen, setIsOpen] = useState(isThisYear)
-  const totalCoins = entries.reduce((prev, val) => prev + val.amount, 0)
-  const totalSpents = entries.reduce((prev, val) => prev + val.amountUsd, 0)
-  const averagePrice = totalSpents / totalCoins
-
-  return (
-    <div key={year}>
-      <h4
-        style={{ fontWeight: 'normal' }}
-        onClick={() => setIsOpen(prev => !prev)}
-      >
-        {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 4)}] -`}
-      </h4>
-      {isOpen && (
-        <ul>
-          {entries.map((entry, i) => (
-            <EntryLine entry={entry} key={i} coinPrice={coinPrice} />
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-}
 
 const CoinDetails: FC<{
   totalCoins: number,
@@ -208,9 +158,8 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           <span>{']'}</span>
         </div>
       </div>
-      {Array.from(coinEntriesByYear.keys()).map(year => {
-        const entries = coinEntriesByYear.get(year) as PaidEntry[]
-        const { name } = entries[0]
+      {[...coinEntriesByYear].map(([year, entries]) => {
+        const [{ name }] = entries
 
         return (
           <CoinEntriesByYear
