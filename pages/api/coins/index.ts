@@ -5,61 +5,9 @@ import HttpStatus from 'http-status'
 import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { paidEntries } from './_paid_entries/_paid_entries'
+import { USD_PRICE_IN_VND } from '../../../lib/constants'
+import { ApiResponse, CoinStats } from './_types'
 
-export type CoinStats = {
-  prices: Record<string, number>
-  usdPrice: number
-  totalHave: number
-  totalSpent: number
-  paids: Record<string, PaidEntry[]>,
-  apiResponse: ApiResponse
-}
-
-export type CoinApiRecord = {
-  id: number
-  name: string
-  symbol: string
-  slug: string
-  num_market_pairs: number
-  date_added: Date
-  tags: string[]
-  max_supply: number
-  circulating_supply: number
-  total_supply: number
-  platform: {
-    id: number
-    name: string
-    symbol: string
-    slug: string
-    token_address: string
-  }
-  is_active: number
-  cmc_rank: number
-  is_fiat: number
-  self_reported_circulating_supply: number
-  self_reported_market_cap: number
-  last_updated: Date
-  quote: {
-    USD: {
-      price: number
-      volume_24h: number
-      volume_change_24h: number
-      percent_change_1h: number
-      percent_change_24h: number
-      percent_change_7d: number
-      percent_change_30d: number
-      percent_change_60d: number
-      percent_change_90d: number
-      market_cap: number
-      market_cap_dominance: number
-      fully_diluted_market_cap: number
-      last_updated: Date
-    }
-  }
-}
-export type ApiResponse = Record<string, CoinApiRecord>
-
-/* eslint camelcase: "off", no-use-before-define: "off", */
 const getPrices = async (...names: string[]): Promise<{
   prices: number[],
   apiResponse: ApiResponse
@@ -71,7 +19,7 @@ const getPrices = async (...names: string[]): Promise<{
   }).then(async res => {
     const { data: apiResponse } = await res.json() as { data: ApiResponse }
 
-    console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
+    // console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
 
     return {
       apiResponse,
@@ -101,8 +49,7 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
       [[usdPrice]]
     ] = await Promise.all([
       coinPrices,
-      // ! FIXME: Get USD price somewhere else
-      [[23_439]]
+      [[USD_PRICE_IN_VND]]
     ])
 
     const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
