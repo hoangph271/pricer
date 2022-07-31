@@ -10,15 +10,18 @@ export const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[], coinPri
   const totalCoins = entries.reduce((prev, val) => prev + val.amount, 0)
   const totalSpents = entries.reduce((prev, val) => prev + val.amountUsd, 0)
   const averagePrice = totalSpents / totalCoins
+  const { isStableCoin } = entries[0]
 
   return (
     <div key={year}>
-      <h4
-        style={{ fontWeight: 'normal' }}
-        onClick={() => setIsOpen(prev => !prev)}
-      >
-        {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 4)}] -`}
-      </h4>
+      {isStableCoin || (
+        <h4
+          style={{ fontWeight: 'normal' }}
+          onClick={() => setIsOpen(prev => !prev)}
+        >
+          {`- ${year} [${formatMoney(totalCoins)}@${formatMoney(averagePrice, 4)}] -`}
+        </h4>
+      )}
       {isOpen && (
         <ul>
           {entries.map((entry, i) => (

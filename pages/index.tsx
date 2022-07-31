@@ -7,12 +7,12 @@ import { signIn, useSession } from 'next-auth/react'
 
 import { formatMoney, str2Date } from '../lib/formatters'
 
-import type { CoinApiRecord, CoinStats } from './api/coins'
 import type { FC, PaidEntry } from '../global'
 import { API_ROOT } from '../lib/constants'
 
 import { MoneyBadge, PercentageBadge, CoinEntriesByYear, AssetSummary } from '../components'
 import { queryCoinNameOrDefault } from '../lib/utils'
+import { CoinApiRecord, CoinStats } from './api/coins/_types'
 
 const CoinDetails: FC<{
   totalCoins: number,
@@ -97,6 +97,11 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
     }
   })
 
+  const { isStableCoin } = coinEntries[0]
+  const formattedTotalCoin = (isStableCoin
+    ? Math.abs(totalCoins)
+    : totalCoins).toFixed(totalCoins > 1000 ? 0 : 4)
+
   return (
     <div className="col-flex-mini-gap">
       <div className="col-flex-mini-gap">
@@ -125,29 +130,41 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       </div>
       <div style={{ margin: '0' }}>
         <div>
-          <div>{`${totalCoins.toFixed(totalCoins > 1000 ? 0 : 4)}@${formatMoney(coinPrice)}`}</div>
-          <CoinDetails
-            coinRecord={apiResponse[queryCoinName]}
-            totalCoins={totalCoins}
-            coinSpent={coinSpent}
-          />
+          {isStableCoin || (
+            <div>
+              {formattedTotalCoin}
+              @
+              {formatMoney(coinPrice)}
+            </div>
+          )}
+          {isStableCoin || (
+            <CoinDetails
+              coinRecord={apiResponse[queryCoinName]}
+              totalCoins={totalCoins}
+              coinSpent={coinSpent}
+            />
+          )}
         </div>
         <div>
           <span>{'['}</span>
-          <span onClick={() => setEarnInUsd(prev => !prev)}>
-            {earnInUsd ? (
-              <span>
-                <MoneyBadge
-                  usdAmount={coinEarnRatio * coinSpent}
-                  usdPrice={usdPrice}
-                  compareTo={coinSpent}
-                />
+          {isStableCoin ? null : (
+            <>
+              <span onClick={() => setEarnInUsd(prev => !prev)}>
+                {earnInUsd ? (
+                  <span>
+                    <MoneyBadge
+                      usdAmount={coinEarnRatio * coinSpent}
+                      usdPrice={usdPrice}
+                      compareTo={coinSpent}
+                    />
+                  </span>
+                ) : (
+                  <PercentageBadge percentage={coinEarnRatio * 100} />
+                )}
               </span>
-            ) : (
-              <PercentageBadge percentage={coinEarnRatio * 100} />
-            )}
-          </span>
-          <span>{' - '}</span>
+              <span>{' - '}</span>
+            </>
+          )}
           <span>
             <MoneyBadge
               usdPrice={usdPrice}
