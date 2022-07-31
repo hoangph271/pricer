@@ -1,5 +1,5 @@
 import { FC } from '../global'
-import { CoinStats } from '../pages/api/coins'
+import { CoinStats } from '../pages/api/coins/_types'
 import { MoneyBadge } from './MoneyBadge'
 import { PercentageBadge } from './PercentageBadge'
 
