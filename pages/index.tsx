@@ -81,7 +81,11 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinEntries = paids[queryCoinName]
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
   const coinPrice = coinStats.prices[queryCoinName] as number
-  const coinSpent = coinEntries.reduce((prev, val) => prev + val.amountUsd, 0)
+  const coinSpent = coinEntries.reduce((prev, val) => {
+    if (val.isStableCoin && val.amountUsd < 0) return prev
+
+    return prev + val.amountUsd
+  }, 0)
   const coinEarnRatio = coinSpent > 0
     ? (coinPrice * totalCoins) / coinSpent
     : 0
