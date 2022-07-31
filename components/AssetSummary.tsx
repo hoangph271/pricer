@@ -11,7 +11,7 @@ export const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <span>
-        <MoneyBadge usdAmount={netProfit} usdPrice={usdPrice} colored={balanceColor} />
+        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} colored={balanceColor} />
         <span>{'/'}</span>
         <MoneyBadge usdAmount={totalSpent} usdPrice={usdPrice} colored={false} />
       </span>
@@ -19,7 +19,7 @@ export const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
         <span>{'['}</span>
         <PercentageBadge percentage={(totalHave / totalSpent) * 100} />
         <span>{' - '}</span>
-        <MoneyBadge usdAmount={totalHave} usdPrice={usdPrice} colored={balanceColor} />
+        <MoneyBadge usdAmount={netProfit} usdPrice={usdPrice} colored={balanceColor} />
         <span>{']'}</span>
       </span>
     </div>
