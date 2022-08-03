@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react'
 import { PaidEntry } from '../global'
 import { formatMoney, formatDate, formatUsd } from '../lib/formatters'
+import { getColor } from '../lib/utils'
 
 export const EntryLine: FC<{ entry: PaidEntry, coinPrice: number }> = props => {
-  const { entry: { amount, amountUsd, date, isStableCoin }, coinPrice } = props
+  const { entry: { amount, amountUsd: spentUsd, date, isStableCoin }, coinPrice } = props
   const [showAmount, setShowAmount] = useState(false)
 
   useEffect(() => {
@@ -18,25 +19,31 @@ export const EntryLine: FC<{ entry: PaidEntry, coinPrice: number }> = props => {
     setShowAmount(prev => !prev)
   }
 
-  const usdPrice = amountUsd / amount
+  const usdPrice = spentUsd / amount
   const usdBalance = amount * coinPrice
-  const isAtLost = usdBalance < amountUsd
 
   return (
     <li style={{ display: 'flex', gap: '0', columnGap: '1rem', flexWrap: 'wrap' }}>
       {date && <span>{formatDate(date)}</span>}
       {showAmount ? (
-        <span onClick={toggleShowAmount}>
-          <span style={{ color: isAtLost ? 'red' : 'green' }}>
+        <span data-testid="toggle-show-amount" onClick={toggleShowAmount}>
+          <span
+            data-testid="usd-balance"
+            style={{ color: getColor(usdBalance, spentUsd) }}
+          >
             {formatUsd(usdBalance)}
           </span>
-          {`/${formatUsd(amountUsd)}`}
+          {`/${formatUsd(spentUsd)}`}
         </span>
       ) : (
-        <span onClick={toggleShowAmount}>
-          {isAtLost ? '-' : ''}
-          {formatMoney(amount)}
-          {isStableCoin ? '' : `@${formatMoney(usdPrice)}`}
+        <span onClick={toggleShowAmount} data-testid="toggle-show-amount">
+          <span
+            data-testid="coin-balance"
+            style={{ color: getColor(usdBalance, spentUsd) }}
+          >
+            {formatMoney(amount)}
+          </span>
+          <span>{isStableCoin ? '' : `@${formatMoney(usdPrice)}`}</span>
         </span>
       )}
     </li>

@@ -1,11 +1,5 @@
-export const getColor = (colored: boolean | string, usdAmount: number, compareTo = 0) => {
-  if (typeof colored === 'string') return colored
-
-  if (colored) {
-    return usdAmount < compareTo ? 'red' : 'green'
-  }
-
-  return ''
+export const getColor = (usdAmount: number, compareTo = 0) => {
+  return usdAmount < compareTo ? 'red' : 'green'
 }
 
 export const queryCoinNameOrDefault = (coinNames: string[]) => {
