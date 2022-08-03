@@ -173,7 +173,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             <MoneyBadge
               usdPrice={usdPrice}
               usdAmount={coinSpent}
-              colored={false}
+              textColor=""
             />
           </span>
           <span>{']'}</span>

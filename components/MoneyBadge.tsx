@@ -7,18 +7,18 @@ type MoneyBadgeProps = {
   usdAmount: number,
   usdPrice: number,
   title?: string,
-  colored?: boolean | string,
+  textColor?: string,
   compareTo?: number
 }
 export const MoneyBadge: FC<MoneyBadgeProps> = (props) => {
-  const { usdAmount, usdPrice, title, colored = true, compareTo = 0 } = props
+  const { usdAmount, usdPrice, title, textColor, compareTo = 0 } = props
   const [showInUsd, setShowInUsd] = useState(true)
 
   const money = showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)
 
   return (
     <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
-      <span style={{ color: getColor(colored, usdAmount, compareTo) }}>
+      <span style={{ color: textColor ?? getColor(usdAmount, compareTo) }}>
         {title ? (
           <span>{`${title}: ${money}`}</span>
         ) : (
