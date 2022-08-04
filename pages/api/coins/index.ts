@@ -41,11 +41,7 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
 
     const allEntries = Object.values(paidEntries).flat(1)
     const totalSpent = allEntries.reduce((sum, entry) => {
-      if (entry.isStableCoin && entry.amountUsd < 0) {
-        return Math.abs(entry.amountUsd) + sum
-      }
-
-      return entry.amountUsd + sum
+      return sum + (entry.isStableCoin ? 0 : entry.amountUsd)
     }, 0)
     const cryptoSymbols = Object.getOwnPropertyNames(paidEntries).sort()
     const { prices: coinPrices, apiResponse } = await getPrices(...cryptoSymbols)

@@ -39,7 +39,7 @@ export const EntryLine: FC<{ entry: PaidEntry, coinPrice: number }> = props => {
         <span onClick={toggleShowAmount} data-testid="toggle-show-amount">
           <span
             data-testid="coin-balance"
-            style={{ color: getColor(usdBalance, spentUsd) }}
+            style={{ color: isStableCoin ? '' : getColor(usdBalance, spentUsd) }}
           >
             {formatMoney(amount)}
           </span>
