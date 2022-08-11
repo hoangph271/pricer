@@ -102,7 +102,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
   return (
     <div className="col-flex-mini-gap">
-      <div className="col-flex-mini-gap row-flex small-gap">
+      <div className="col-flex-mini-gap row-flex small-gap" id="coin-metadata">
         <CoinSelect
           queryCoinName={queryCoinName}
           coinNames={allCoinNames}
