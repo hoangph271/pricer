@@ -53,6 +53,21 @@ const CoinDetails: FC<{
   )
 }
 
+const getCoinEntriesByYear = (coinEntries: PaidEntry[]) => {
+  const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
+
+  coinEntries.forEach((entry) => {
+    const year = str2Date(entry.date).getFullYear()
+
+    if (coinEntriesByYear.has(year)) {
+      coinEntriesByYear.get(year)!.push(entry)
+    } else {
+      coinEntriesByYear.set(year, [entry])
+    }
+  })
+
+  return coinEntriesByYear
+}
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
   const [earnInUsd, setEarnInUsd] = useState(false)
@@ -78,16 +93,7 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
     ? (coinPrice * totalCoins) / coinSpent
     : 0
 
-  const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
-  coinEntries.forEach((entry) => {
-    const year = str2Date(entry.date).getFullYear()
-
-    if (coinEntriesByYear.has(year)) {
-      coinEntriesByYear.get(year)!.push(entry)
-    } else {
-      coinEntriesByYear.set(year, [entry])
-    }
-  })
+  const coinEntriesByYear = getCoinEntriesByYear(coinEntries)
 
   const { isStableCoin } = coinEntries[0]
   const formattedTotalCoin = (isStableCoin
@@ -96,57 +102,57 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
   return (
     <div className="col-flex-mini-gap">
-      <div className="col-flex-mini-gap">
+      <div className="col-flex-mini-gap row-flex small-gap">
         <CoinSelect
           queryCoinName={queryCoinName}
           coinNames={allCoinNames}
         />
-      </div>
-      <div style={{ margin: '0' }}>
-        <div>
-          {isStableCoin || (
-            <div>
-              {formattedTotalCoin}
-              @
-              {formatMoney(coinPrice)}
-            </div>
-          )}
-          {isStableCoin || (
-            <CoinDetails
-              coinRecord={apiResponse[queryCoinName]}
-              totalCoins={totalCoins}
-              coinSpent={coinSpent}
-            />
-          )}
-        </div>
-        <div>
-          <span>{'['}</span>
-          {isStableCoin ? null : (
-            <>
-              <span onClick={() => setEarnInUsd(prev => !prev)}>
-                {earnInUsd ? (
-                  <span>
-                    <MoneyBadge
-                      usdAmount={coinEarnRatio * coinSpent}
-                      usdPrice={usdPrice}
-                      compareTo={coinSpent}
-                    />
-                  </span>
-                ) : (
-                  <PercentageBadge percentage={coinEarnRatio * 100} />
-                )}
-              </span>
-              <span>{' - '}</span>
-            </>
-          )}
-          <span>
-            <MoneyBadge
-              usdPrice={usdPrice}
-              usdAmount={coinSpent}
-              textColor=""
-            />
-          </span>
-          <span>{']'}</span>
+        <div style={{ margin: '0' }}>
+          <div>
+            {isStableCoin || (
+              <div>
+                {formattedTotalCoin}
+                @
+                {formatMoney(coinPrice)}
+              </div>
+            )}
+            {isStableCoin || (
+              <CoinDetails
+                coinRecord={apiResponse[queryCoinName]}
+                totalCoins={totalCoins}
+                coinSpent={coinSpent}
+              />
+            )}
+          </div>
+          <div>
+            <span>{'['}</span>
+            {isStableCoin ? null : (
+              <>
+                <span onClick={() => setEarnInUsd(prev => !prev)}>
+                  {earnInUsd ? (
+                    <span>
+                      <MoneyBadge
+                        usdAmount={coinEarnRatio * coinSpent}
+                        usdPrice={usdPrice}
+                        compareTo={coinSpent}
+                      />
+                    </span>
+                  ) : (
+                    <PercentageBadge percentage={coinEarnRatio * 100} />
+                  )}
+                </span>
+                <span>{' - '}</span>
+              </>
+            )}
+            <span>
+              <MoneyBadge
+                usdPrice={usdPrice}
+                usdAmount={coinSpent}
+                textColor=""
+              />
+            </span>
+            <span>{']'}</span>
+          </div>
         </div>
       </div>
       {[...coinEntriesByYear].map(([year, entries]) => {

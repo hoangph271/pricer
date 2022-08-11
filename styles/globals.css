@@ -84,6 +84,14 @@ a {
   width: calc(100% - 1rem);
   margin: 0.5rem;
 }
+.row-flex {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.small-gap {
+  gap: 1.2rem;
+}
 
 .not-badge .is-success {
   color: green;
