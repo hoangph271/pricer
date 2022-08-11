@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
-import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
 
 import { formatMoney, str2Date } from '../lib/formatters'
@@ -56,25 +55,14 @@ const CoinDetails: FC<{
 
 const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
-  const [showMiscs, setShowMiscs] = useState(false)
   const [earnInUsd, setEarnInUsd] = useState(false)
 
   const { prices, paids, usdPrice, apiResponse } = coinStats
   const allCoinNames = Object.keys(prices)
   const queryCoinName = queryCoinNameOrDefault(allCoinNames)
 
-  const filteredCoinNames = allCoinNames
-    .filter(coinName => {
-      if (showMiscs) return true
-      if (coinName === queryCoinName) return true
-
-      const totalSpent = paids[coinName].reduce((prev, entry) => entry.amountUsd + prev, 0)
-
-      return totalSpent >= 100
-    })
-
   if (queryCoinName === null) {
-    Router.push(`/?coinName=${filteredCoinNames[0]}`)
+    Router.push(`/?coinName=${allCoinNames[0]}`)
     return null
   }
 
@@ -109,28 +97,10 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   return (
     <div className="col-flex-mini-gap">
       <div className="col-flex-mini-gap">
-        <div>
-          <button
-            style={{ margin: '0.4rem' }}
-            className={`nes-btn is-${showMiscs ? 'warning' : 'primary'}`}
-            onClick={() => setShowMiscs(prev => !prev)}
-          >
-            {showMiscs ? 'Hide Miscs' : 'Show Miscs'}
-          </button>
-          {filteredCoinNames.map(coinName => (
-            <Link
-              href={`/?coinName=${coinName}`}
-              key={coinName}
-            >
-              <button
-                style={{ margin: '0.4rem' }}
-                className={`nes-btn is-${coinName === queryCoinName ? 'success' : ''}`}
-              >
-                {coinName}
-              </button>
-            </Link>
-          ))}
-        </div>
+        <CoinSelect
+          queryCoinName={queryCoinName}
+          coinNames={allCoinNames}
+        />
       </div>
       <div style={{ margin: '0' }}>
         <div>
@@ -252,4 +222,38 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       coinStats
     }
   }
+}
+
+type CoinSelectProps = {
+  queryCoinName: string
+  coinNames: string[]
+}
+const CoinSelect: FC<CoinSelectProps> = ({
+  queryCoinName,
+  coinNames
+}) => {
+  const router = useRouter()
+
+  return (
+    <div>
+      <div className="nes-select" id="coin-select">
+        <select
+          required
+          defaultValue={queryCoinName}
+          onChange={(e) => {
+            router.push(`/?coinName=${e.target.value}`)
+          }}
+        >
+          {coinNames.map(coinName => (
+            <option
+              value={coinName}
+              key={coinName}
+            >
+              {coinName}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  )
 }
