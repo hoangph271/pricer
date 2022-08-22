@@ -25,7 +25,7 @@ export const CoinEntriesByYear: FC<{ year: number, entries: PaidEntry[], coinPri
       {isOpen && (
         <ul>
           {entries.map((entry, i) => (
-            <EntryLine entry={entry} key={i} coinPrice={coinPrice} />
+            <EntryLine entry={entry} key={`${i}-${entry.name}`} coinPrice={coinPrice} />
           ))}
         </ul>
       )}
