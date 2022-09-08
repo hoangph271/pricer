@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "deploy": "yarn && yarn build && pm2 restart pricer",
+    "deploy": "yarn && yarn build && yarn start",
     "deploy:latest": "git pull && yarn install --ignore-engines && yarn deploy"
   },
   "dependencies": {
