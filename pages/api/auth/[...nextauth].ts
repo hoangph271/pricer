@@ -23,6 +23,6 @@ export default NextAuth({
   ],
   theme: {
     colorScheme: 'auto',
-    logo: 'https://pricer.alpha-sneu.xyz/icon.png'
+    logo: 'https://pricer.sneu.date/icon.png'
   }
 })
