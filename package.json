@@ -12,6 +12,7 @@
     "deploy:latest": "git pull && yarn install --ignore-engines && yarn deploy"
   },
   "dependencies": {
+    "chart.js": "^4.0.1",
     "cors": "^2.8.5",
     "http-status": "^1.5.1",
     "next": "^12.1.5",
@@ -19,6 +20,7 @@
     "next-pwa": "^5.5.2",
     "node-fetch": "^3.2.3",
     "react": "^18.0.0",
+    "react-chartjs-2": "^5.0.1",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
