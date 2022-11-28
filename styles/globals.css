@@ -108,9 +108,19 @@ a {
   right: 0.4rem;
 }
 
+#coins-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media only screen and (max-width: 768px) {
   #coin-metadata {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  #coins-controls {
+    flex-direction: column;
   }
 }

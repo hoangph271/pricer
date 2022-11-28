@@ -196,7 +196,7 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
       <Head>
         <title>{'#Pricer'}</title>
       </Head>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div id="coins-controls">
         <CoinsWheel coinStats={coinStats} />
         <AssetSummary coinStats={coinStats} />
       </div>
