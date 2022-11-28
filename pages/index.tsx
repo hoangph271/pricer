@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { GetServerSideProps } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 
@@ -12,6 +12,7 @@ import { API_ROOT } from '../lib/constants'
 import { MoneyBadge, PercentageBadge, CoinEntriesByYear, AssetSummary } from '../components'
 import { queryCoinNameOrDefault } from '../lib/utils'
 import { CoinApiRecord, CoinStats } from './api/coins/_types'
+import { CoinsWheel } from '../components/CoinsWheel'
 
 const CoinDetails: FC<{
   totalCoins: number,
@@ -103,10 +104,6 @@ const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   return (
     <div className="col-flex-mini-gap">
       <div className="col-flex-mini-gap row-flex small-gap" id="coin-metadata">
-        <CoinSelect
-          queryCoinName={queryCoinName}
-          coinNames={allCoinNames}
-        />
         <div style={{ margin: '0' }}>
           <div>
             {isStableCoin || (
@@ -199,7 +196,10 @@ const Home: FC<{ coinStats: CoinStats }> = (props) => {
       <Head>
         <title>{'#Pricer'}</title>
       </Head>
-      <AssetSummary coinStats={coinStats} />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CoinsWheel coinStats={coinStats} />
+        <AssetSummary coinStats={coinStats} />
+      </div>
       <CoinPaidSummary coinStats={coinStats} />
     </div>
   )
@@ -228,38 +228,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       coinStats
     }
   }
-}
-
-type CoinSelectProps = {
-  queryCoinName: string
-  coinNames: string[]
-}
-const CoinSelect: FC<CoinSelectProps> = ({
-  queryCoinName,
-  coinNames
-}) => {
-  const router = useRouter()
-
-  return (
-    <div>
-      <div className="nes-select" id="coin-select">
-        <select
-          required
-          defaultValue={queryCoinName}
-          onChange={(e) => {
-            router.push(`/?coinName=${e.target.value}`)
-          }}
-        >
-          {coinNames.map(coinName => (
-            <option
-              value={coinName}
-              key={coinName}
-            >
-              {coinName}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  )
 }
