@@ -2,11 +2,12 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { ArcElement, Chart, Tooltip, ChartData } from 'chart.js'
-Chart.register(ArcElement, Tooltip)
 
 import { CoinStats } from '../pages/api/coins/_types'
 import { PaidEntry } from '../global'
 import { formatUsd } from '../lib/formatters'
+
+Chart.register(ArcElement, Tooltip)
 
 export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
   const router = useRouter()
