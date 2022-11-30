@@ -1,11 +1,15 @@
 export const formatMoney = (amount: number, maybeDigits?: number) => {
-  const needsMoreZero = amount < 0.0001
+  const needsMoreZeros = amount < 0.0001
   let digits = maybeDigits
 
   if (typeof maybeDigits !== 'number') {
-    digits = needsMoreZero
-      ? 6
-      : 4
+    const needsNoZero = amount > 100
+
+    if (needsMoreZeros) {
+      digits = 6
+    } else if (needsNoZero) {
+      digits = 0
+    }
   }
 
   const formatOptions = amount >= 1000 ? {
@@ -18,9 +22,12 @@ export const formatMoney = (amount: number, maybeDigits?: number) => {
 
   const formatted = new Intl.NumberFormat('en-US', formatOptions).format(amount)
 
-  return needsMoreZero
+  const withTrailingZeroes = needsMoreZeros
     ? formatted.slice(1)
     : formatted
+
+  return withTrailingZeroes
+    .replace(/0+$/g, '')
 }
 export const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {

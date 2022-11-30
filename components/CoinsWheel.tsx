@@ -28,7 +28,7 @@ export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
       .filter((coinName) => {
         const coinSum = sumSpentEntries(coinStats.paids[coinName])
 
-        return showAll || (coinSum > 20)
+        return showAll || (coinSum > 0)
       })
       .sort((coinName1, coinName2) => {
         const coinSum1 = sumEntries(coinStats.paids[coinName1])
@@ -56,10 +56,10 @@ export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
         data={chartData}
         options={{
           aspectRatio: 3,
-          onClick (_, activeElements) {
-            const [{ index }] = activeElements
-            const coinName = chartData.labels![index]
+          onClick (_, [activeElement]) {
+            if (!activeElement) return
 
+            const coinName = chartData.labels![activeElement.index]
             router.push(`/?coinName=${coinName}`)
           },
           plugins: {

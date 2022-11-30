@@ -1,21 +1,17 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import Router from 'next/router'
-import { Chart, LinearScale, PointElement } from 'chart.js'
+import { Chart, LinearScale, PointElement, Title, Legend } from 'chart.js'
 import { Bubble } from 'react-chartjs-2'
 
 import { formatMoney } from '../lib/formatters'
 import { queryCoinNameOrDefault } from '../lib/utils'
-import { CoinApiRecord, CoinStats } from '../pages/api/coins/_types'
-import { MoneyBadge } from './MoneyBadge'
-import { PercentageBadge } from './PercentageBadge'
+import { CoinStats } from '../pages/api/coins/_types'
 
-Chart.register(LinearScale, PointElement)
+Chart.register(LinearScale, PointElement, Title, Legend)
 
 export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
-  const [earnInUsd, setEarnInUsd] = useState(false)
-
-  const { prices, paids, usdPrice, apiResponse } = coinStats
+  const { prices, paids } = coinStats
   const allCoinNames = Object.keys(prices)
   const queryCoinName = queryCoinNameOrDefault(allCoinNames)
 
@@ -28,6 +24,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const totalCoins = coinEntries.reduce((prev, entry) => entry.amount + prev, 0)
   const coinPrice = coinStats.prices[queryCoinName] as number
   const maxAmount = coinEntries.sort((e1, e2) => e2.amount - e1.amount)[0].amount
+  const totalValue = totalCoins * coinPrice
   const coinSpent = coinEntries.reduce((prev, val) => {
     if (val.isStableCoin && val.amountUsd < 0) return prev
 
@@ -38,58 +35,16 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
     : 0
 
   const { isStableCoin } = coinEntries[0]
-  const formattedTotalCoin = (isStableCoin
+  const formattedTotalCoin = formatMoney((isStableCoin
     ? Math.abs(totalCoins)
-    : totalCoins).toFixed(totalCoins > 1000 ? 0 : 4)
+    : totalCoins))
 
   return (
     <div className="col-flex-mini-gap">
-      <div className="col-flex-mini-gap row-flex small-gap" id="coin-metadata">
-        <div style={{ margin: '0' }}>
-          <div>
-            {isStableCoin || (
-              <CoinDetails
-                coinRecord={apiResponse[queryCoinName]}
-                totalCoins={totalCoins}
-                coinSpent={coinSpent}
-              />
-            )}
-          </div>
-          <div>
-            <span>{'['}</span>
-            {isStableCoin || (
-              <>
-                <span onClick={() => setEarnInUsd(prev => !prev)}>
-                  {earnInUsd ? (
-                    <span>
-                      <MoneyBadge
-                        usdAmount={coinEarnRatio * coinSpent}
-                        usdPrice={usdPrice}
-                        compareTo={coinSpent}
-                      />
-                    </span>
-                  ) : (
-                    <PercentageBadge percentage={coinEarnRatio * 100} />
-                  )}
-                </span>
-                <span>{' - '}</span>
-              </>
-            )}
-            <span>
-              <MoneyBadge
-                usdPrice={usdPrice}
-                usdAmount={coinSpent}
-                textColor=""
-              />
-            </span>
-            <span>{']'}</span>
-          </div>
-        </div>
-      </div>
       <Bubble
         data={{
           datasets: [{
-            label: `${queryCoinName} - ${formattedTotalCoin}@${formatMoney(coinPrice)}`,
+            label: `${queryCoinName}@${formatMoney(coinPrice)} - ${formattedTotalCoin} buy at $${formatMoney(coinSpent / totalCoins)}`,
             data: coinEntries.map(entry => ({
               x: new Date(entry.date).getTime(),
               y: entry.amountUsd / entry.amount,
@@ -99,6 +54,27 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         }}
         options={{
           plugins: {
+            legend: {
+              labels: {
+                padding: 4,
+                font: {
+                  weight: 'normal',
+                  family: 'monospace'
+                },
+                usePointStyle: true,
+              }
+            },
+            title: {
+              display: true,
+              padding: 0,
+              text: [
+                `$${formatMoney(totalValue)}/$${formatMoney(coinSpent)} (${(coinEarnRatio * 100).toFixed(2)}%)`,
+              ],
+              font: {
+                weight: 'normal',
+                family: 'monospace'
+              }
+            },
             tooltip: {
               callbacks: {
                 label (val) {
@@ -116,7 +92,9 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               backgroundColor (val) {
                 const { y: price } = val.raw as { y: number }
 
-                return price > coinPrice ? 'red' : 'green'
+                return price > coinPrice
+                  ? 'rgba(235, 0, 0, 0.9)'
+                  : 'rgba(0, 225, 0, 0.8)'
               },
             }
           },
@@ -132,62 +110,6 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           }
         }}
       />
-    </div>
-  )
-}
-
-// const getCoinEntriesByYear = (coinEntries: PaidEntry[]) => {
-//   const coinEntriesByYear: Map<number, PaidEntry[]> = new Map()
-
-//   coinEntries.forEach((entry) => {
-//     const year = str2Date(entry.date).getFullYear()
-
-//     if (coinEntriesByYear.has(year)) {
-//       coinEntriesByYear.get(year)!.push(entry)
-//     } else {
-//       coinEntriesByYear.set(year, [entry])
-//     }
-//   })
-
-//   return coinEntriesByYear
-// }
-
-const CoinDetails: FC<{
-  totalCoins: number,
-  coinSpent: number,
-  coinRecord: CoinApiRecord,
-}> = (props) => {
-  const { coinSpent, totalCoins, coinRecord } = props
-  const [showMore, setShowMore] = useState(false)
-
-  const usdQuote = coinRecord.quote.USD
-
-  return showMore ? (
-    <div
-      className="nes-container is-centered"
-    >
-      <div onClick={() => setShowMore(false)}>
-        {`•DCA@${formatMoney(coinSpent / totalCoins)}•`}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-        {[
-          usdQuote.percent_change_1h,
-          usdQuote.percent_change_24h,
-          usdQuote.percent_change_7d,
-          usdQuote.percent_change_60d,
-        ]
-          .map((percentage, i) => (
-            <PercentageBadge
-              key={i}
-              percentage={percentage}
-              compareTo={0}
-            />
-          ))}
-      </div>
-    </div>
-  ) : (
-    <div onClick={() => setShowMore(true)}>
-      {`•DCA@${formatMoney(coinSpent / totalCoins)}•`}
     </div>
   )
 }
