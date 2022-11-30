@@ -27,7 +27,6 @@ export const formatMoney = (amount: number, maybeDigits?: number) => {
     : formatted
 
   return withTrailingZeroes
-    .replace(/0+$/g, '')
 }
 export const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', {

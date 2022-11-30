@@ -44,7 +44,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
       <Bubble
         data={{
           datasets: [{
-            label: `${queryCoinName}@${formatMoney(coinPrice)} - ${formattedTotalCoin} buy at $${formatMoney(coinSpent / totalCoins)}`,
+            label: `$${formatMoney(coinPrice)} - ${formattedTotalCoin} ${queryCoinName}@${formatMoney(coinSpent / totalCoins)}`,
             data: coinEntries.map(entry => ({
               x: new Date(entry.date).getTime(),
               y: entry.amountUsd / entry.amount,
@@ -58,7 +58,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               labels: {
                 padding: 4,
                 font: {
-                  weight: 'normal',
+                  weight: 'bold',
                   family: 'monospace'
                 },
                 usePointStyle: true,
@@ -78,11 +78,11 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             tooltip: {
               callbacks: {
                 label (val) {
-                  const { x, y: price, r: amountUsd } = val.raw as Record<string, number>
-                  const date = new Date(x).toLocaleDateString()
-                  const amount = formatMoney(amountUsd / price)
+                  const { date, amountUsd, amount } = coinEntries[val.dataIndex]
+                  const dateStr = new Date(date).toLocaleDateString()
+                  const price = amountUsd / amount
 
-                  return `${amount}@${formatMoney(price)} in ${date}`
+                  return `${amount}@$${formatMoney(price)} in ${dateStr}`
                 }
               }
             }
