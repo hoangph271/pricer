@@ -28,7 +28,7 @@ export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
       .filter((coinName) => {
         const coinSum = sumSpentEntries(coinStats.paids[coinName])
 
-        return showAll || (coinSum > 80)
+        return showAll || (coinSum > 20)
       })
       .sort((coinName1, coinName2) => {
         const coinSum1 = sumEntries(coinStats.paids[coinName1])
