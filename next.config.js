@@ -5,9 +5,9 @@ module.exports = {
   experimental: {
     // ? TODO: When this bug is fixed, un-comment concurrentFeatures & serverComponents
     // * https://github.com/vercel/next.js/issues/30586
-    // concurrentFeatures: true,
-    // serverComponents: true,
-    // urlImports: [],
+    concurrentFeatures: true,
+    serverComponents: true,
+    urlImports: [],
     forceSwcTransforms: true,
   }
 }
