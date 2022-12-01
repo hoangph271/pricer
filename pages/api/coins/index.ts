@@ -5,7 +5,6 @@ import HttpStatus from 'http-status'
 import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { paidEntries } from './_paid_entries/_paid_entries'
-import { USD_PRICE_IN_VND } from '../../../lib/constants'
 import { ApiResponse, CoinStats } from './_types'
 
 const getPrices = async (...names: string[]): Promise<{
@@ -48,10 +47,8 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
 
     const [
       cryptoPrices,
-      [[usdPrice]]
     ] = await Promise.all([
       coinPrices,
-      [[USD_PRICE_IN_VND]]
     ])
 
     const priceReducer = (price: number) => (prev: number, val: PaidEntry) => val.amount * price + prev
@@ -71,7 +68,6 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
       totalHave,
       totalSpent,
       paids: paidEntries,
-      usdPrice,
       apiResponse
     }
 
