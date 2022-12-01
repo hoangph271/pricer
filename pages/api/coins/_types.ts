@@ -47,7 +47,6 @@ export type CoinApiRecord = {
 export type ApiResponse = Record<string, CoinApiRecord>
 export type CoinStats = {
   prices: Record<string, number>
-  usdPrice: number
   totalHave: number
   totalSpent: number
   paids: Record<string, PaidEntry[]>,
