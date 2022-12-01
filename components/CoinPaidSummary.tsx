@@ -1,13 +1,11 @@
 import { FC } from 'react'
 import Router from 'next/router'
-import { Chart as ChartJs, LinearScale, PointElement, Title, Legend, LineElement, CategoryScale } from 'chart.js'
 import { Chart } from 'react-chartjs-2'
+import 'chart.js/auto'
 
 import { formatMoney } from '../lib/formatters'
 import { queryCoinNameOrDefault } from '../lib/utils'
 import { CoinStats } from '../pages/api/coins/_types'
-
-ChartJs.register(LinearScale, PointElement, Title, Legend, LineElement, CategoryScale)
 
 export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
