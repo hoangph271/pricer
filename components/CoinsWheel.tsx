@@ -49,13 +49,13 @@ export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
 
   return (
     <div
-      style={{ height: '200px', width: '600px', overflowX: 'auto', maxWidth: '100%' }}
+      style={{ height: '200px', width: '200px', overflowX: 'auto', maxWidth: '100%' }}
     >
       <Doughnut
         style={{ margin: 'auto', height: 400 }}
         data={chartData}
         options={{
-          aspectRatio: 3,
+          aspectRatio: 1,
           onClick (_, [activeElement]) {
             if (!activeElement) return
 
@@ -64,6 +64,7 @@ export const CoinsWheel = ({ coinStats }: { coinStats: CoinStats }) => {
           },
           plugins: {
             legend: {
+              display: false,
               position: 'right',
             },
             tooltip: {

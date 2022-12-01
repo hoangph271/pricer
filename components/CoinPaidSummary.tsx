@@ -1,13 +1,13 @@
 import { FC } from 'react'
 import Router from 'next/router'
-import { Chart, LinearScale, PointElement, Title, Legend } from 'chart.js'
-import { Bubble } from 'react-chartjs-2'
+import { Chart as ChartJs, LinearScale, PointElement, Title, Legend, LineElement, CategoryScale } from 'chart.js'
+import { Chart } from 'react-chartjs-2'
 
 import { formatMoney } from '../lib/formatters'
 import { queryCoinNameOrDefault } from '../lib/utils'
 import { CoinStats } from '../pages/api/coins/_types'
 
-Chart.register(LinearScale, PointElement, Title, Legend)
+ChartJs.register(LinearScale, PointElement, Title, Legend, LineElement, CategoryScale)
 
 export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const { coinStats } = props
@@ -41,16 +41,34 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
   return (
     <div className="col-flex-mini-gap">
-      <Bubble
+      <Chart
+        type="bubble"
         data={{
-          datasets: [{
-            label: `$${formatMoney(coinPrice)} - ${formattedTotalCoin} ${queryCoinName}@${formatMoney(coinSpent / totalCoins)}`,
-            data: coinEntries.map(entry => ({
-              x: new Date(entry.date).getTime(),
-              y: entry.amountUsd / entry.amount,
-              r: entry.amount / maxAmount * 10,
-            }))
-          }]
+          datasets: [
+            {
+              type: 'bubble' as const,
+              label: `${formattedTotalCoin}@${formatMoney(coinSpent / totalCoins)}`,
+              data: coinEntries.map(entry => ({
+                x: new Date(entry.date).getTime(),
+                y: entry.amountUsd / entry.amount,
+                r: entry.amount / maxAmount * 10,
+              }))
+            },
+            {
+              type: 'line' as const,
+              label: `${queryCoinName}@${formatMoney(coinPrice)}`,
+              backgroundColor: 'rgb(99, 235, 99)',
+              borderColor: 'rgb(99, 235, 99)',
+              borderWidth: 1,
+              pointRadius: 1,
+              fill: false,
+              data: coinEntries.map((entry) => ({
+                x: new Date(entry.date).getTime(),
+                y: coinPrice,
+                r: 1
+              })),
+            }
+          ]
         }}
         options={{
           plugins: {
