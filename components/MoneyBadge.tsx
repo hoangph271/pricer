@@ -1,28 +1,22 @@
-import { useState } from 'react'
 import { FC } from '../global'
-import { formatUsd, formatVnd } from '../lib/formatters'
 import { getColor } from '../lib/utils'
 
 type MoneyBadgeProps = {
   usdAmount: number,
-  usdPrice: number,
   title?: string,
   textColor?: string,
   compareTo?: number
 }
 export const MoneyBadge: FC<MoneyBadgeProps> = (props) => {
-  const { usdAmount, usdPrice, title, textColor, compareTo = 0 } = props
-  const [showInUsd, setShowInUsd] = useState(true)
-
-  const money = showInUsd ? formatUsd(usdAmount) : formatVnd(usdAmount * usdPrice)
+  const { usdAmount, title, textColor, compareTo = 0 } = props
 
   return (
-    <span className="not-badge" onClick={() => setShowInUsd(!showInUsd)}>
+    <span className="not-badge">
       <span style={{ color: textColor ?? getColor(usdAmount, compareTo) }}>
         {title ? (
-          <span>{`${title}: ${money}`}</span>
+          <span>{`${title}: ${usdAmount}`}</span>
         ) : (
-          <span>{money}</span>
+          <span>{usdAmount}</span>
         )}
       </span>
     </span>
