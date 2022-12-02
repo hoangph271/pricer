@@ -6,6 +6,7 @@ import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
 import { paidEntries } from './_paid_entries/_paid_entries'
 import { ApiResponse, CoinStats } from './_types'
+import { X_CMC_PRO_API_KEY } from '../../../lib/constants'
 
 const getPrices = async (...names: string[]): Promise<{
   prices: number[],
@@ -13,7 +14,7 @@ const getPrices = async (...names: string[]): Promise<{
 }> => {
   return await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
     headers: {
-      'X-CMC_PRO_API_KEY': 'deb827df-a1a6-4ceb-940c-3114e9adca4d'
+      'X-CMC_PRO_API_KEY': X_CMC_PRO_API_KEY
     }
   }).then(async res => {
     const { data: apiResponse } = await res.json() as { data: ApiResponse }
