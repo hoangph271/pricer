@@ -1,7 +1,7 @@
 // @ts-nocheck
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { HARD_CODED_ACCOUNT, SECRET } from '../../../lib/constants'
+import { HARD_CODED_PASSWORD, HARD_CODED_USERNAME, SECRET } from '../../../lib/constants'
 
 export default NextAuth({
   secret: SECRET,
@@ -13,9 +13,8 @@ export default NextAuth({
         username: { label: 'Username', type: 'text', placeholder: 'alpha-sneu' },
         password: { label: 'Password', type: 'password' }
       },
-      async authorize (credentials) {
-        const isAuthed = credentials.username === HARD_CODED_ACCOUNT.username &&
-          credentials.password === HARD_CODED_ACCOUNT.password
+      async authorize ({ username, password }) {
+        const isAuthed = username === HARD_CODED_USERNAME && password === HARD_CODED_PASSWORD
 
         return isAuthed ? { username: '@Me' } : null
       }

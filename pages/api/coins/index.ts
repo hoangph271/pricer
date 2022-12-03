@@ -19,8 +19,6 @@ const getPrices = async (...names: string[]): Promise<{
   }).then(async res => {
     const { data: apiResponse } = await res.json() as { data: ApiResponse }
 
-    // console.info(`From API:\n${JSON.stringify(apiResponse, null, 2)}`)
-
     return {
       apiResponse,
       prices: Object
