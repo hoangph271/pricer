@@ -31,6 +31,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinEarnRatio = totalSpent > 0
     ? (coinPrice * totalCoins) / totalSpent
     : 0
+  const dcaPrice = totalSpent / totalCoins
 
   const { isStableCoin } = coinEntries[0]
   const formattedTotalCoin = formatMoney((isStableCoin
@@ -68,7 +69,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             },
             {
               type: 'line' as const,
-              label: `DCA@${formatMoney(coinPrice)}`,
+              label: `DCA@${formatMoney(dcaPrice)}`,
               backgroundColor: 'rgb(99, 99, 235)',
               borderColor: 'rgb(99, 99, 235)',
               borderWidth: 1,
@@ -76,7 +77,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               fill: false,
               data: coinEntries.map((entry) => ({
                 x: new Date(entry.date).getTime(),
-                y: totalSpent / totalCoins,
+                y: dcaPrice,
                 r: 1
               })),
             },
