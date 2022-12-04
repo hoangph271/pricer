@@ -19,7 +19,7 @@ export const AssetSummary: FC<{ coinStats: CoinStats }> = (props) => {
         <span>{'['}</span>
         <PercentageBadge percentage={(totalHave / totalSpent) * 100} />
         <span>{' - '}</span>
-        <MoneyBadge usdAmount={netProfit} textColor={balanceColor} />
+        <MoneyBadge usdAmount={Math.abs(netProfit)} textColor={balanceColor} />
         <span>{']'}</span>
       </span>
     </div>

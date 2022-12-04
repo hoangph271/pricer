@@ -1,4 +1,5 @@
 import { FC } from '../global'
+import { formatUsd } from '../lib/formatters'
 import { getColor } from '../lib/utils'
 
 type MoneyBadgeProps = {
@@ -9,14 +10,15 @@ type MoneyBadgeProps = {
 }
 export const MoneyBadge: FC<MoneyBadgeProps> = (props) => {
   const { usdAmount, title, textColor, compareTo = 0 } = props
+  const money = formatUsd(usdAmount)
 
   return (
     <span className="not-badge">
       <span style={{ color: textColor ?? getColor(usdAmount, compareTo) }}>
         {title ? (
-          <span>{`${title}: ${usdAmount}`}</span>
+          <span>{`${title}: ${money}`}</span>
         ) : (
-          <span>{usdAmount}</span>
+          <span>{money}</span>
         )}
       </span>
     </span>
