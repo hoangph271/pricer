@@ -13,7 +13,12 @@ export const MoneyBadge: FC<MoneyBadgeProps> = (props) => {
   const money = formatUsd(usdAmount)
 
   return (
-    <span className="not-badge">
+    <a
+      target="_blank"
+      rel="noreferrer"
+      className="not-badge"
+      href={`https://www.google.com/search?q=${encodeURIComponent(money)}`}
+    >
       <span style={{ color: textColor ?? getColor(usdAmount, compareTo) }}>
         {title ? (
           <span>{`${title}: ${money}`}</span>
@@ -21,6 +26,6 @@ export const MoneyBadge: FC<MoneyBadgeProps> = (props) => {
           <span>{money}</span>
         )}
       </span>
-    </span>
+    </a>
   )
 }
