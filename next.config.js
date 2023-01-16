@@ -7,6 +7,7 @@ module.exports = {
     // * https://github.com/vercel/next.js/issues/30586
     concurrentFeatures: true,
     serverComponents: true,
+    // appDir: true,
     urlImports: [],
     forceSwcTransforms: true,
   }

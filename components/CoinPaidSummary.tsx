@@ -23,14 +23,15 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
   const coinPrice = coinStats.prices[queryCoinName] as number
   const maxAmount = coinEntries.sort((e1, e2) => e2.amount - e1.amount)[0].amount
   const totalValue = totalCoins * coinPrice
-  const coinSpent = coinEntries.reduce((prev, val) => {
+  const totalSpent = coinEntries.reduce((prev, val) => {
     if (val.isStableCoin && val.amountUsd < 0) return prev
 
     return prev + val.amountUsd
   }, 0)
-  const coinEarnRatio = coinSpent > 0
-    ? (coinPrice * totalCoins) / coinSpent
+  const coinEarnRatio = totalSpent > 0
+    ? (coinPrice * totalCoins) / totalSpent
     : 0
+  const dcaPrice = totalSpent / totalCoins
 
   const { isStableCoin } = coinEntries[0]
   const formattedTotalCoin = formatMoney((isStableCoin
@@ -45,7 +46,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
           datasets: [
             {
               type: 'bubble' as const,
-              label: `${formattedTotalCoin}@${formatMoney(coinSpent / totalCoins)}`,
+              label: `${formattedTotalCoin}@${formatMoney(totalSpent / totalCoins)}`,
               data: coinEntries.map(entry => ({
                 x: new Date(entry.date).getTime(),
                 y: entry.amountUsd / entry.amount,
@@ -65,7 +66,21 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
                 y: coinPrice,
                 r: 1
               })),
-            }
+            },
+            {
+              type: 'line' as const,
+              label: `DCA@${formatMoney(dcaPrice)}`,
+              backgroundColor: 'rgb(99, 99, 235)',
+              borderColor: 'rgb(99, 99, 235)',
+              borderWidth: 1,
+              pointRadius: 1,
+              fill: false,
+              data: coinEntries.map((entry) => ({
+                x: new Date(entry.date).getTime(),
+                y: dcaPrice,
+                r: 1
+              })),
+            },
           ]
         }}
         options={{
@@ -84,7 +99,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               display: true,
               padding: 0,
               text: [
-                `$${formatMoney(totalValue)}/$${formatMoney(coinSpent)} (${(coinEarnRatio * 100).toFixed(2)}%)`,
+                `$${formatMoney(totalValue)}/$${formatMoney(totalSpent)} (${(coinEarnRatio * 100).toFixed(2)}%)`,
               ],
               font: {
                 weight: 'normal',
