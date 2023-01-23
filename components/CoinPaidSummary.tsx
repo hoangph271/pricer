@@ -3,7 +3,7 @@ import Router from 'next/router'
 import { Chart } from 'react-chartjs-2'
 import 'chart.js/auto'
 
-import { formatMoney } from '../lib/formatters'
+import { formatMoney, formatUsd } from '../lib/formatters'
 import { queryCoinNameOrDefault } from '../lib/utils'
 import { CoinStats } from '../pages/api/coins/_types'
 
@@ -109,11 +109,10 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             tooltip: {
               callbacks: {
                 label (val) {
-                  const { date, amountUsd, amount } = coinEntries[val.dataIndex]
-                  const dateStr = new Date(date).toLocaleDateString()
+                  const { amountUsd, amount } = coinEntries[val.dataIndex]
                   const price = amountUsd / amount
 
-                  return `${amount}@$${formatMoney(price)} in ${dateStr}`
+                  return `${amount}@$${formatMoney(price)} [${formatUsd(amount * coinPrice - amountUsd)}]`
                 }
               }
             }

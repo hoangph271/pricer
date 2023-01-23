@@ -57,11 +57,12 @@ const fetchCoinStats = async (cookie: string) => {
     }
   })
 
-  console.info('/coins/', res.statusText)
+  if (!res.ok) {
+    console.warn('/coins/', res.statusText, await res.text())
+    return null
+  }
 
-  return res.ok
-    ? await res.json() as CoinStats
-    : null
+  return await res.json() as CoinStats
 }
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const coinStats = await fetchCoinStats(ctx.req?.headers?.cookie ?? '')
