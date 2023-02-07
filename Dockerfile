@@ -20,7 +20,7 @@ FROM node:hydrogen-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-ENV NEXTAUTH_URL http://pricer.sneu.date
+ENV NEXTAUTH_URL https://pricer.sneu.date
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
