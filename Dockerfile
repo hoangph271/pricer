@@ -19,8 +19,8 @@ RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 FROM node:hydrogen-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXTAUTH_URL https://pricer.sneu.date
+# ENV NODE_ENV production
+# ENV NEXTAUTH_URL https://pricer.sneu.date
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
