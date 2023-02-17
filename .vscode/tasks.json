@@ -6,7 +6,7 @@
     {
       "label": "docker run",
       "type": "shell",
-      "command": "docker run --env-file .env -p 3000:3000 pricer:latest"
+      "command": "docker run --env-file .env.local -p 3001:3000 pricer:latest"
     }
   ]
 }
