@@ -110,9 +110,10 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
               callbacks: {
                 label (val) {
                   const { amountUsd, amount } = coinEntries[val.dataIndex]
-                  const price = amountUsd / amount
+                  const buyPrice = amountUsd / amount
+                  const netProfit = amount * coinPrice - amountUsd
 
-                  return `${amount}@$${formatMoney(price)} [${formatUsd(amount * coinPrice - amountUsd)}]`
+                  return `${amount}@$${formatMoney(buyPrice)} - ${netProfit > 0 ? 'earned' : 'lost'} ${formatUsd(netProfit)} from ${formatUsd(amountUsd)}`
                 }
               }
             }
