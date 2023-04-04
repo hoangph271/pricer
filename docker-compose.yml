@@ -1,0 +1,13 @@
+---
+version: "2.1"
+services:
+  hbp:
+    image: pricer
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    restart: unless-stopped
