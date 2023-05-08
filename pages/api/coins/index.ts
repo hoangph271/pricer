@@ -4,7 +4,6 @@ import { getSession } from 'next-auth/react'
 import HttpStatus from 'http-status'
 import { cors, runMiddleware, statusRes } from '../_api_helpers'
 import { PaidEntry } from '../../../global'
-import { paidEntries } from './_paid_entries/_paid_entries'
 import { ApiResponse, CoinStats } from './_types'
 import { X_CMC_PRO_API_KEY } from '../../../lib/constants'
 
@@ -36,6 +35,8 @@ const handler: NextApiHandler<CoinStats> = async (req, res) => {
     if (!session) {
       return statusRes(res, HttpStatus.UNAUTHORIZED)
     }
+
+    const { paidEntries } = await import('./_paid_entries/_paid_entries')
 
     const allEntries = Object.values(paidEntries).flat(1)
     const totalSpent = allEntries.reduce((sum, entry) => {
