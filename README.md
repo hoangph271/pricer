@@ -1,4 +1,5 @@
 - Create `pages/api/coins/_paid_entries` module as following:
+
 ```ts
 export const paidEntries: Record<string, PaidEntry[]> = {
   BTC,
