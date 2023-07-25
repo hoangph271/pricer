@@ -15,7 +15,8 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
-RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+RUN npm i -g pnpm
+RUN pnpm build && pnpm install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next
 FROM node:hydrogen-alpine AS runner
@@ -43,4 +44,4 @@ EXPOSE 3000
 # Uncomment the following line in case you want to disable telemetry.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]
