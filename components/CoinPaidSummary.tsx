@@ -66,21 +66,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
                 y: coinPrice,
                 r: 1
               })),
-            },
-            {
-              type: 'line' as const,
-              label: `DCA@${formatMoney(dcaPrice)}`,
-              backgroundColor: 'rgb(99, 99, 235)',
-              borderColor: 'rgb(99, 99, 235)',
-              borderWidth: 1,
-              pointRadius: 1,
-              fill: false,
-              data: coinEntries.map((entry) => ({
-                x: new Date(entry.date).getTime(),
-                y: dcaPrice,
-                r: 1
-              })),
-            },
+            }
           ]
         }}
         options={{
