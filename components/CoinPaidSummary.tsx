@@ -28,10 +28,10 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
 
     return prev + val.amountUsd
   }, 0)
+
   const coinEarnRatio = totalSpent > 0
     ? (coinPrice * totalCoins) / totalSpent
     : 0
-  const dcaPrice = totalSpent / totalCoins
 
   const { isStableCoin } = coinEntries[0]
   const formattedTotalCoin = formatMoney((isStableCoin
