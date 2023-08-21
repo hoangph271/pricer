@@ -33,10 +33,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
     ? (coinPrice * totalCoins) / totalSpent
     : 0
 
-  const { isStableCoin } = coinEntries[0]
-  const formattedTotalCoin = formatMoney((isStableCoin
-    ? Math.abs(totalCoins)
-    : totalCoins))
+  const dcaPrice = totalSpent / totalCoins
 
   return (
     <div className="col-flex-mini-gap">
@@ -44,15 +41,6 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
         type="bubble"
         data={{
           datasets: [
-            {
-              type: 'bubble' as const,
-              label: `${formattedTotalCoin}@${formatMoney(totalSpent / totalCoins)}`,
-              data: coinEntries.map(entry => ({
-                x: new Date(entry.date).getTime(),
-                y: entry.amountUsd / entry.amount,
-                r: entry.amount / maxAmount * 10,
-              }))
-            },
             {
               type: 'line' as const,
               label: `${queryCoinName}@${formatMoney(coinPrice)}`,
@@ -66,7 +54,30 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
                 y: coinPrice,
                 r: 1
               })),
-            }
+            },
+            {
+              type: 'line' as const,
+              label: `DCA@${formatMoney(dcaPrice)}`,
+              backgroundColor: 'rgb(99, 99, 235)',
+              borderColor: 'rgb(99, 99, 235)',
+              borderWidth: 1,
+              pointRadius: 1,
+              fill: false,
+              data: coinEntries.map((entry) => ({
+                x: new Date(entry.date).getTime(),
+                y: dcaPrice,
+                r: 1
+              })),
+            },
+            {
+              type: 'bubble' as const,
+              label: '',
+              data: coinEntries.map(entry => ({
+                x: new Date(entry.date).getTime(),
+                y: entry.amountUsd / entry.amount,
+                r: entry.amount / maxAmount * 10,
+              }))
+            },
           ]
         }}
         options={{
