@@ -11,7 +11,7 @@ const getPrices = async (...names: string[]): Promise<{
   prices: number[],
   apiResponse: ApiResponse
 }> => {
-  return await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
+  return await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
     headers: {
       'X-CMC_PRO_API_KEY': X_CMC_PRO_API_KEY
     }
@@ -22,10 +22,13 @@ const getPrices = async (...names: string[]): Promise<{
       apiResponse,
       prices: Object
         .values(apiResponse)
-        .map((val: any) => val.quote.USD.price as number)
+        .map((val: any) => {
+          return val.at(0).quote.USD?.price as number
+        })
     }
   })
 }
+
 const handler: NextApiHandler<CoinStats> = async (req, res) => {
   try {
     await runMiddleware(req, res, cors)
