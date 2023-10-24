@@ -12,7 +12,7 @@ import { CoinsWheel } from '../components/CoinsWheel'
 import { CoinPaidSummary } from '../components/CoinPaidSummary'
 
 const Home: FC<{ coinStats: CoinStats }> = (props) => {
-  const [coinStats] = useState(props.coinStats)
+  const { coinStats } = props
   const [showRefresh, setShowRefresh] = useState(false)
   const { status } = useSession({
     required: true,
