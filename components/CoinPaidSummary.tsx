@@ -71,7 +71,7 @@ export const CoinPaidSummary: FC<{ coinStats: CoinStats }> = props => {
             },
             {
               type: 'bubble' as const,
-              label: '',
+              label: `${formatMoney(totalCoins)} ${queryCoinName}`,
               data: coinEntries.map(entry => ({
                 x: new Date(entry.date).getTime(),
                 y: entry.amountUsd / entry.amount,
