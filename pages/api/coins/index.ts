@@ -7,16 +7,48 @@ import { PaidEntry } from '../../../global'
 import { ApiResponse, CoinStats } from './_types'
 import { X_CMC_PRO_API_KEY } from '../../../lib/constants'
 
+const symbolToId: Record<string, number> = {
+  ACE: 9792, // ? Acent
+}
+const idToSymbol: Record<string, string> = Object.entries(symbolToId)
+  .reduce((prev, [key, value]) => ({ ...prev, [value.toString()]: key }), {})
+
+function fetchBySymbols (symbols: string[]) {
+  return fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=${symbols.join(',')}`, {
+    headers: {
+      'X-CMC_PRO_API_KEY': X_CMC_PRO_API_KEY
+    }
+  })
+}
+
+function fetchByIds (ids: number[]) {
+  return fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${ids.join(',')}`, {
+    headers: {
+      'X-CMC_PRO_API_KEY': X_CMC_PRO_API_KEY
+    }
+  })
+}
+
 const getPrices = async (...names: string[]): Promise<{
   prices: number[],
   apiResponse: ApiResponse
 }> => {
-  return await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=${names.join(',')}`, {
-    headers: {
-      'X-CMC_PRO_API_KEY': X_CMC_PRO_API_KEY
+  const symbolsWithId = names.filter(name => symbolToId[name])
+  const ids = symbolsWithId.map(name => symbolToId[name])
+
+  return await Promise.all([
+    fetchBySymbols(names).then(res => res.json()),
+    fetchByIds(ids).then(res => res.json()),
+  ]).then(async (results) => {
+    const [resultBySymbols, resultByIds] = results as Array<{ data: ApiResponse }>
+
+    const convertedResultByIds = Object.entries(resultByIds.data)
+      .reduce((prev, [id, value]) => ({ ...prev, [idToSymbol[id]]: [value] }), {})
+
+    const apiResponse = {
+      ...(resultBySymbols.data) as ApiResponse,
+      ...(convertedResultByIds) as ApiResponse,
     }
-  }).then(async res => {
-    const { data: apiResponse } = await res.json() as { data: ApiResponse }
 
     return {
       apiResponse,
