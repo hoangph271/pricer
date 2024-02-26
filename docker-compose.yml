@@ -8,6 +8,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 9601:3000
+    environment:
+      - NEXTAUTH_URL=https://pricer.sneu.date
     env_file:
       - .env
     restart: unless-stopped
