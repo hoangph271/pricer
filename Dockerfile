@@ -34,7 +34,7 @@ COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 4200
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
