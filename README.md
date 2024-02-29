@@ -1,3 +1,5 @@
+- Create a `.env` file based on `.env.example`
+
 - Create `pages/api/coins/_paid_entries` module as following:
 
 ```ts
@@ -16,4 +18,4 @@ type PaidEntry = {
 }
 ```
 
-- Run `yarn deploy:latest`
+- Run `pnpm deploy:latest`
